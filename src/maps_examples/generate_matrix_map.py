@@ -29,18 +29,6 @@ for coords_seed in range(MATRIX_WIDTH ** 2):
   id += 1
 
 print("Random places generated.")
-# viana_to_braga = {
-#   # is needed to think about the elevation_diff, because it depends on the direction
-#   # road_quality is a percentage
-#   # current_catastrophes should be of another type, like an enum
-#   "land": {"distance": 60, "road_quality": 80, "max_speed": 120, "elevation_diff": 100},
-#   "air": {"distance": 50},
-#   "sea": {"distance": 50},
-# }
-
-# Terrestre - qualidade rota, elevação, catástrofe, velocidade maxima, distancia, transito???, 
-# Aéreo - distancia, catastrofe
-# Maritimo - distancia, catastrofe
 
 print("Calculating routes.")
 for i, place in enumerate(places):
@@ -60,6 +48,7 @@ for i, place in enumerate(places):
     neighbors.append(left_neighbor)
 
   for j in range(i):
+    line_distance = randint(50, 100)
     land = None
 
     if (j in neighbors):
@@ -79,15 +68,19 @@ for i, place in enumerate(places):
         road_quality = randint(30, 70)
 
       land = {
-        "distance": randint(50, 100),
+        "distance": line_distance * randint(125, 175) / 100,
         "road_quality": road_quality,
         "max_speed": max_speed,
         "elevation_diff": randint(-100, 100),
       }
 
+      air = {
+        "distance": line_distance * randint(105, 110) / 100,
+      }
+
     routes[i].append({
       "land": land,
-      "air": None,
+      "air": air,
       "sea": None,
     })
 
