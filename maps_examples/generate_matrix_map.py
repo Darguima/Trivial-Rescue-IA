@@ -2,17 +2,30 @@ from random import randint
 from json import dump
 
 MATRIX_WIDTH = 8
+MAP_VOID_PROBABILITY = 20
 
 places = []
+coords_to_id = {}
 routes = []
 
-for i in range(MATRIX_WIDTH ** 2):
+id = 0
+for coords_seed in range(MATRIX_WIDTH ** 2):
+  place_exists = randint(1, 100) > MAP_VOID_PROBABILITY
+
+  if (not place_exists):
+    continue
+
+  coords = (coords_seed % MATRIX_WIDTH, coords_seed // MATRIX_WIDTH)
   places.append({
-    "name": f"Place {i}",
+    "name": f"Place {id}",
     "district_capital": True,
-    "coords": (i % MATRIX_WIDTH, i // MATRIX_WIDTH),
+    "coords": coords,
     "population": randint(1000, 1_000_000),
   })
+
+  coords_key = f"({coords[0]}, {coords[1]})"
+  coords_to_id[coords_key] = id
+  id += 1
 
 # viana_to_braga = {
 #   # is needed to think about the elevation_diff, because it depends on the direction
@@ -27,17 +40,20 @@ for i in range(MATRIX_WIDTH ** 2):
 # Aéreo - distancia, catastrofe
 # Maritimo - distancia, catastrofe
 
-
-for i in range(MATRIX_WIDTH ** 2):
+for i, place in enumerate(places):
   routes.append([])
+
+  place_x, place_y = place["coords"]
 
   neighbors = []
 
-  if (i - MATRIX_WIDTH >= 0):
-    neighbors.append(i - MATRIX_WIDTH)
+  top_neighbor = coords_to_id.get(f"({place_x}, {place_y - 1})")
+  if (top_neighbor != None):
+    neighbors.append(top_neighbor)
 
-  if (i % MATRIX_WIDTH != 0):
-    neighbors.append(i - 1)
+  left_neighbor = coords_to_id.get(f"({place_x - 1}, {place_y})")
+  if (left_neighbor != None):
+    neighbors.append(left_neighbor)
 
   for j in range(i):
     land = None
