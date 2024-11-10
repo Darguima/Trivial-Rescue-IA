@@ -43,7 +43,7 @@ Then generate a random map with the following command:
 
 ```bash
 # Feel free to change the number of places on the firsts lines of the script
-$ python maps_examples/generate_matrix_map.py
+$ python src/maps_examples/generate_matrix_map.py
 ```
 
 
@@ -52,7 +52,7 @@ This will create `random_places.json` and `random_places_routes.json` to be used
 Then, you can run the project with the following command:
 
 ```bash
-$ python main.py
+$ python src/main.py
 ```
 
 

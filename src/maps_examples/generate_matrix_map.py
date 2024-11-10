@@ -1,13 +1,14 @@
 from random import randint
 from json import dump
 
-MATRIX_WIDTH = 8
+MATRIX_WIDTH = 20
 MAP_VOID_PROBABILITY = 20
 
 places = []
 coords_to_id = {}
 routes = []
 
+print("Generating random places.")
 id = 0
 for coords_seed in range(MATRIX_WIDTH ** 2):
   place_exists = randint(1, 100) > MAP_VOID_PROBABILITY
@@ -27,6 +28,7 @@ for coords_seed in range(MATRIX_WIDTH ** 2):
   coords_to_id[coords_key] = id
   id += 1
 
+print("Random places generated.")
 # viana_to_braga = {
 #   # is needed to think about the elevation_diff, because it depends on the direction
 #   # road_quality is a percentage
@@ -40,7 +42,9 @@ for coords_seed in range(MATRIX_WIDTH ** 2):
 # Aéreo - distancia, catastrofe
 # Maritimo - distancia, catastrofe
 
+print("Calculating routes.")
 for i, place in enumerate(places):
+  print(f"Generated {i}/{len(places)}.", end="\r")
   routes.append([])
 
   place_x, place_y = place["coords"]
@@ -87,8 +91,12 @@ for i, place in enumerate(places):
       "sea": None,
     })
 
-with open("maps_examples/random_places.json", "w") as f:
-  dump(places, f, indent=2)
+print("Routes calculated.")
 
-with open("maps_examples/random_places_routes.json", "w") as f:
-  dump(routes, f, indent=2)
+print("Saving places to files.")
+with open("src/maps_examples/random_places.json", "w") as f:
+  dump(places, f)
+
+print("Saving routes to files.")
+with open("src/maps_examples/random_places_routes.json", "w") as f:
+  dump(routes, f)

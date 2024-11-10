@@ -3,8 +3,8 @@ from draw_map import draw_map
 
 from json import load
 
-places = load(open("maps_examples/random_places.json"))
-routes = load(open("maps_examples/random_places_routes.json"))
+places = load(open("src/maps_examples/random_places.json"))
+routes = load(open("src/maps_examples/random_places_routes.json"))
 
 map = Map(places, routes)
 
