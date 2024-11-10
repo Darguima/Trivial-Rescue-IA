@@ -17,11 +17,12 @@ for coords_seed in range(MATRIX_WIDTH ** 2):
     continue
 
   coords = (coords_seed % MATRIX_WIDTH, coords_seed // MATRIX_WIDTH)
+  population = randint(1000, 1_000_000)
   places.append({
     "name": f"Place {id}",
-    "district_capital": True,
+    "district_capital": population > 600_000,
     "coords": coords,
-    "population": randint(1000, 1_000_000),
+    "population": population,
   })
 
   coords_key = f"({coords[0]}, {coords[1]})"
