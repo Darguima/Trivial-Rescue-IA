@@ -21,11 +21,12 @@ def draw_map(map: Map):
   pos = nx.get_node_attributes(G, 'pos')
 
   place_sizes = [G.nodes[node]["place_data"]['population'] / 5000 for node in G.nodes]  # Adjust size by population
+  place_colors = ["r" if G.nodes[node]["place_data"]['is_capital'] else 'b' for node in G.nodes]
 
   speed_colors = {50: "g", 90: "y", 100: "m", 120: "r"}
   route_colors = [speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges]  # Adjust size by population
 
-  nx.draw_networkx_nodes(G, pos, node_size=place_sizes, alpha=0.6)
+  nx.draw_networkx_nodes(G, pos, node_color=place_colors,node_size=place_sizes, alpha=0.6)
   nx.draw_networkx_edges(G, pos, edge_color=route_colors, width=3, alpha=0.5)
   
   # Clean up plot to remove axis and spines

@@ -20,7 +20,7 @@ for coords_seed in range(MATRIX_WIDTH ** 2):
   population = randint(1000, 1_000_000)
   places.append({
     "name": f"Place {id}",
-    "district_capital": population > 600_000,
+    "is_capital": population > 950_000,
     "coords": coords,
     "population": population,
   })
@@ -75,9 +75,9 @@ for i, place in enumerate(places):
         "elevation_diff": randint(-100, 100),
       }
 
-      air = {
-        "distance": line_distance * randint(105, 110) / 100,
-      }
+    air = {
+      "distance": line_distance * randint(105, 110) / 100,
+    }
 
     routes[i].append({
       "land": land,
