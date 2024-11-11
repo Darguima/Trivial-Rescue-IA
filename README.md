@@ -32,10 +32,11 @@ This project was developed for the subject Artificial Intelligence from Universi
 
 #### Running the project
 
-Inside the project folder, start by starting the virtual environment and installing the dependencies:
+Inside the project folder, start by installing the dependencies. We recommend using a virtual environment to avoid conflicts with other projects.
 
 ```bash
-$ source ./bin/activate
+$ python3 -m venv virtualenv
+$ source ./virtualenv/bin/activate # need to be done every time you open a new terminal
 $ pip install -r requirements.txt
 ```
 
@@ -43,7 +44,7 @@ Then generate a random map with the following command:
 
 ```bash
 # Feel free to change the number of places on the firsts lines of the script
-$ python src/maps_examples/generate_matrix_map.py
+$ python maps_examples/generate_matrix_map.py
 ```
 
 
@@ -52,7 +53,7 @@ This will create `random_places.json` and `random_places_routes.json` to be used
 Then, you can run the project with the following command:
 
 ```bash
-$ python src/main.py
+$ python main.py
 ```
 
 

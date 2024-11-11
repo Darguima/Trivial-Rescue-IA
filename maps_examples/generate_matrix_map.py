@@ -88,9 +88,9 @@ for i, place in enumerate(places):
 print("Routes calculated.")
 
 print("Saving places to files.")
-with open("src/maps_examples/random_places.json", "w") as f:
+with open("maps_examples/random_places.json", "w") as f:
   dump(places, f)
 
 print("Saving routes to files.")
-with open("src/maps_examples/random_places_routes.json", "w") as f:
+with open("maps_examples/random_places_routes.json", "w") as f:
   dump(routes, f)
