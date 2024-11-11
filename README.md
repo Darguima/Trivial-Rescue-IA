@@ -28,7 +28,10 @@ This project was developed for the subject Artificial Intelligence from Universi
 
 #### Cloning the repository
 
-* ⚠️ Change me ⚠️ 
+```bash
+$ git clone git@github.com:Darguima/Trivial-Rescue.git
+$ cd Trivial-Rescue
+```
 
 #### Running the project
 
@@ -47,7 +50,6 @@ Then generate a random map with the following command:
 $ python maps_examples/generate_matrix_map.py
 ```
 
-
 This will create `random_places.json` and `random_places_routes.json` to be used in the project.
 
 Then, you can run the project with the following command:
@@ -55,7 +57,6 @@ Then, you can run the project with the following command:
 ```bash
 $ python main.py
 ```
-
 
 ## Developed by 🧑‍💻:
 
