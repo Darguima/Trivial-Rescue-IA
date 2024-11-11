@@ -1,4 +1,4 @@
-#!/home/darguima/Code/Trivial-Rescue/bin/python3
+#!/home/darguima/Code/Trivial-Rescue/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
