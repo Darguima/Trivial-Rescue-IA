@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 from map import Map
 
@@ -28,6 +29,23 @@ def draw_map(map: Map):
 
   nx.draw_networkx_nodes(G, pos, node_color=place_colors,node_size=place_sizes, alpha=0.6)
   nx.draw_networkx_edges(G, pos, edge_color=route_colors, width=3, alpha=0.5)
+
+  # Create legend for edges
+  plt.legend(
+    handles=[
+      Line2D([0], [0], marker='o', color='w', markerfacecolor="r", markersize=10, alpha=0.6, label="Capital"),
+      Line2D([0], [0], marker='o', color='w', markerfacecolor="b", markersize=10, alpha=0.6, label="Non-Capital"),
+      Line2D([0], [0], color="g", lw=3, alpha=0.5, label="50 km/h"),
+      Line2D([0], [0], color="y", lw=3, alpha=0.5, label="90 km/h"),
+      Line2D([0], [0], color="m", lw=3, alpha=0.5, label="100 km/h"),
+      Line2D([0], [0], color="r", lw=3, alpha=0.5, label="120 km/h")
+    ],
+    title="Legend",
+    bbox_to_anchor=(0.05, 0.3),     # Fine-tune the legend position (x, y)
+    borderaxespad=0.0             # Padding between the legend and the plot
+  )
+
+
   
   # Clean up plot to remove axis and spines
   plt.gca().set_xticks([])
