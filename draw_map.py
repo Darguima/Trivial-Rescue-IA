@@ -1,0 +1,58 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+from map import Map
+
+def draw_map(map: Map):
+  G = nx.Graph()
+
+  print("Preparing to draw the map.")
+  for place_id in map.get_all_places_ids():
+    place = map.get_place_by_id(place_id)
+    print(f"Adding {place['name']} to the map.")
+
+    x, y = place['coords']
+    G.add_node(int(place_id), pos=(x, y), place_data=place, name=place['name'])
+
+    for neighbor_id in map.get_neighbors_ids_by_place_id(place_id)["land"]:
+      route = map.get_route(place_id, neighbor_id)
+      G.add_edge(place_id, neighbor_id, route_data=route["land"])
+
+  pos = nx.get_node_attributes(G, 'pos')
+
+  place_sizes = [G.nodes[node]["place_data"]['population'] / 5000 for node in G.nodes]  # Adjust size by population
+  place_colors = ["r" if G.nodes[node]["place_data"]['is_capital'] else 'b' for node in G.nodes]
+
+  speed_colors = {50: "g", 90: "y", 100: "m", 120: "r"}
+  route_colors = [speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges]  # Adjust size by population
+
+  nx.draw_networkx_nodes(G, pos, node_color=place_colors,node_size=place_sizes, alpha=0.6)
+  nx.draw_networkx_edges(G, pos, edge_color=route_colors, width=3, alpha=0.5)
+
+  # Create legend for edges
+  plt.legend(
+    handles=[
+      Line2D([0], [0], marker='o', color='w', markerfacecolor="r", markersize=10, alpha=0.6, label="Capital"),
+      Line2D([0], [0], marker='o', color='w', markerfacecolor="b", markersize=10, alpha=0.6, label="Non-Capital"),
+      Line2D([0], [0], color="g", lw=3, alpha=0.5, label="50 km/h"),
+      Line2D([0], [0], color="y", lw=3, alpha=0.5, label="90 km/h"),
+      Line2D([0], [0], color="m", lw=3, alpha=0.5, label="100 km/h"),
+      Line2D([0], [0], color="r", lw=3, alpha=0.5, label="120 km/h")
+    ],
+    title="Legend",
+    bbox_to_anchor=(0.05, 0.3),     # Fine-tune the legend position (x, y)
+    borderaxespad=0.0             # Padding between the legend and the plot
+  )
+
+
+  
+  # Clean up plot to remove axis and spines
+  plt.gca().set_xticks([])
+  plt.gca().set_yticks([])
+  plt.gca().spines['top'].set_visible(False)
+  plt.gca().spines['right'].set_visible(False)
+  plt.gca().spines['bottom'].set_visible(False)
+  plt.gca().spines['left'].set_visible(False)
+  
+  plt.show()
