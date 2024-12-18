@@ -10,7 +10,7 @@ def draw_map(map: Map):
   print("Preparing to draw the map.")
   for place_id in map.get_all_places_ids():
     place = map.get_place_by_id(place_id)
-    print(f"Adding {place['name']} to the map.")
+    print(f"Adding {place['name']} to the map.", end="\r")
 
     x, y = place['coords']
     G.add_node(int(place_id), pos=(x, y), place_data=place, name=place['name'])
@@ -18,6 +18,8 @@ def draw_map(map: Map):
     for neighbor_id in map.get_neighbors_ids_by_place_id(place_id)["land"]:
       route = map.get_route(place_id, neighbor_id)
       G.add_edge(place_id, neighbor_id, route_data=route["land"])
+
+  print("")
 
   pos = nx.get_node_attributes(G, 'pos')
 
@@ -29,6 +31,9 @@ def draw_map(map: Map):
 
   nx.draw_networkx_nodes(G, pos, node_color=place_colors,node_size=place_sizes, alpha=0.6)
   nx.draw_networkx_edges(G, pos, edge_color=route_colors, width=3, alpha=0.5)
+
+  labels = nx.get_node_attributes(G, 'name')
+  nx.draw_networkx_labels(G, pos, labels, font_size=12)
 
   # Create legend for edges
   plt.legend(

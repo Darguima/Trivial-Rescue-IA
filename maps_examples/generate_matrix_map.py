@@ -1,7 +1,7 @@
 from random import randint
 from json import dump
 
-MATRIX_WIDTH = 20
+MATRIX_WIDTH = 5
 MAP_VOID_PROBABILITY = 20
 
 places = []
@@ -33,7 +33,7 @@ print("Random places generated.")
 
 print("Calculating routes.")
 for i, place in enumerate(places):
-  print(f"Generated {i}/{len(places)}.", end="\r")
+  # print(f"Generated {i}/{len(places)}.", end="\r")
   routes.append([])
 
   place_x, place_y = place["coords"]
@@ -49,7 +49,8 @@ for i, place in enumerate(places):
     neighbors.append(left_neighbor)
 
   for j in range(i):
-    line_distance = randint(50, 100)
+    edges_distance = ((places[i]["coords"][0] - places[j]["coords"][0]) ** 2 + (places[i]["coords"][1] - places[j]["coords"][1]) ** 2) ** 0.5
+    line_distance = randint(50, 100) * edges_distance
     land = None
 
     if (j in neighbors):
