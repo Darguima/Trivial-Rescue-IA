@@ -2,8 +2,8 @@ from os import system, name, environ
 import multiprocessing
 from json import dumps as json_dumps
 
-from map import Map
-from draw_map import draw_map
+from map.map import Map
+from map.draw_map import draw_map
 from vehicles.car import Car
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 

@@ -1,4 +1,4 @@
-from map import Map
+from map.map import Map
 from vehicles.vehicle import Vehicle
 
 class Boat(Vehicle):

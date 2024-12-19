@@ -1,4 +1,4 @@
-from map import Map
+from map.map import Map
 from utils.distance_between_coords import distance_between_coords
 
 from vehicles.sum_vehicles_cost import sum_vehicles_cost

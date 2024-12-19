@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from typing import Literal
 
-from map import Map
+from map.map import Map
 
 def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", print_progress: bool = True):
   if not print_progress:
