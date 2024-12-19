@@ -14,6 +14,9 @@ class Cost:
   
   def __str__(self):
     return f"Time: {self.time}, Monetary Cost: {self.monetary_cost}. Final Cost: {self.get_final_cost()}"
+  
+  def __lt__(self, other):
+    return self.get_final_cost() < other.get_final_cost()
 
 def sum_vehicles_cost(vehicles: List[Vehicle]):
   """

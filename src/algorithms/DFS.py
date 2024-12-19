@@ -23,9 +23,11 @@ def depth_first_search(map: Map, end_city_id: str):
     print("Truck cost of the path:", truck_cost)
     print("Helicopter cost of the path:", helicopter_cost)
 
-    best_route = min([car_cost, truck_cost, helicopter_cost], key=lambda cost: cost.get_final_cost())
+    options = [car_cost, truck_cost, helicopter_cost]
+    options = [option for option in options if option is not None]
+    best_route = min(options)
 
-    print("\nBest route: (index start at 0)", best_route)
+    print("\nBest route: ", best_route)
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
