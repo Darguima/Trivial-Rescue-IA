@@ -19,11 +19,11 @@ def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", print_pro
 
     draw_type = "map_coords" if map_type == "real" else "matrix_coords"
     x, y = city[draw_type]
-    G.add_node(str(city_id), pos=(x, y), place_data=city, name=city['name'])
+    G.add_node(city_id, pos=(x, y), place_data=city, name=city['name'])
 
     for neighbor_id in city["neighbors"]["land"]:
       road = map.get_routes_between_cities(city_id, neighbor_id)["land"]
-      G.add_edge(str(city_id), str(neighbor_id), route_data=road)
+      G.add_edge(city_id, neighbor_id, route_data=road)
 
   print("Map drawn.                           ", end="\r")
 

@@ -38,7 +38,7 @@ capital_cities = [] # min heap with most populated cities
 
 print(f"Generating random cities.", end="\r")
 
-id = 0
+id = "0"
 for space_i in range(MATRIX_WIDTH ** 2):
   print(f"Generating random cities. {space_i / (MATRIX_WIDTH ** 2) * 100:.2f}%", end="\r")
 
@@ -58,7 +58,7 @@ for space_i in range(MATRIX_WIDTH ** 2):
   elevation = randint(-100, 100)
 
   cities[id] = {
-    "id": str(id),
+    "id": id,
     "name": f"City {id}",
     "capital_info": None,
     "matrix_coords": matrix_coords,
@@ -111,7 +111,7 @@ for space_i in range(MATRIX_WIDTH ** 2):
       "elevation_diff": elevation_diff,
     }
 
-  id += 1
+  id = str(int(id) + 1)
 
 print("Generated random cities. 100%    ")
 
@@ -144,9 +144,9 @@ for i, capital_id in enumerate(capitals_ids):
 print("Converted cities to capitals. 100%    ")
 
 print("Saving cities to files.")
-with open("maps_examples/random_cities.json", "w") as f:
+with open("src/maps_examples/random_cities.json", "w") as f:
   dump(cities, f)
 
 print("Saving routes to files.")
-with open("maps_examples/random_cities_routes.json", "w") as f:
+with open("src/maps_examples/random_cities_routes.json", "w") as f:
   dump(routes, f)

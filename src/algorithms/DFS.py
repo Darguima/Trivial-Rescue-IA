@@ -60,7 +60,7 @@ def find_path(map: Map, end_city_id: str):
             return path
 
         for neighbor_id in current_city["neighbors"]["land"]:
-          neighbor_id = str(neighbor_id)
+          neighbor_id = neighbor_id
           if neighbor_id not in visited:
             stack.append(map.get_city_by_id(neighbor_id))
             parent[neighbor_id] = current_city_id

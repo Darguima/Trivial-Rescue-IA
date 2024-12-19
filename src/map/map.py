@@ -14,7 +14,7 @@ class Map:
     """
     city_id = str(city_id)
     self.__ensure_city_id(city_id)
-    return self.__cities.get(str(city_id))
+    return self.__cities.get(city_id)
 
   def get_all_cities(self) -> list[City]:
     """
@@ -32,25 +32,25 @@ class Map:
     """
     Returns the land, air and sea routes between two cities.
     """
+    source_id = str(source_id)
+    target_id = str(target_id)
+
     self.__ensure_city_id(source_id)
     self.__ensure_city_id(target_id)
 
-    _source_id = str(source_id)
-    _target_id = str(target_id)
-
     # The routes are stores on a triangle matrix, so we need order the ids
-    source_id = str(max(int(_source_id), int(_target_id)))
-    target_id = str(min(int(_source_id), int(_target_id)))
+    first_id = str(max(int(source_id), int(target_id)))
+    second_id = str(min(int(source_id), int(target_id)))
 
     try:
-      source_routes = self.__routes[source_id]
+      source_routes = self.__routes[first_id]
       # air routes are stored on a different way
-      air_routes = self.__routes[_source_id].get("air", {}).get(_target_id, None)
+      air_routes = self.__routes[source_id].get("air", {}).get(target_id, None)
 
       r = {
-        "land": source_routes.get("land", {}).get(target_id),
+        "land": source_routes.get("land", {}).get(second_id),
         "air": air_routes,
-        "sea": source_routes.get("sea", {}).get(target_id)
+        "sea": source_routes.get("sea", {}).get(second_id)
       }
 
       return r
