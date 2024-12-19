@@ -2,6 +2,7 @@ from map import Map
 from utils.distance_between_coords import distance_between_coords
 
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
+from vehicles.choose_best_route import choose_best_route
 from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
@@ -17,6 +18,10 @@ def depth_first_search(map: Map, end_city_id: str):
     print("\nCar cost of the path:", sum_vehicles_cost(car_route))
     print("Truck cost of the path:", sum_vehicles_cost(truck_route))
     print("Helicopter cost of the path:", sum_vehicles_cost(helicopter_route))
+
+    best_route_i, best_route = choose_best_route([car_route, truck_route, helicopter_route])
+
+    print("\nBest route: (index start at 0)", best_route_i)
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
