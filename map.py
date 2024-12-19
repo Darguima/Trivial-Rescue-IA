@@ -18,19 +18,25 @@ class Map:
     """
     return list(self.__cities.values())
   
-  def get_routes_between_cities(self, city_id1: str, city_id2: str) -> RouteBetweenCities:
+  def get_routes_between_cities(self, source_id: str, target_id: str) -> RouteBetweenCities:
     """
     Returns the land, air and sea routes between two cities.
     """
 
-    source_id = str(max(int(city_id1), int(city_id2)))
-    target_id = str(min(int(city_id1), int(city_id2)))
+    _source_id = str(source_id)
+    _target_id = str(target_id)
+
+    # The routes are stores on a triangle matrix, so we need order the ids
+    source_id = str(max(int(_source_id), int(_target_id)))
+    target_id = str(min(int(_source_id), int(_target_id)))
 
     source_routes = self.__routes[source_id]
+    # air routes are stored on a different way
+    air_routes = self.__routes[_source_id].get("air", {}).get(_target_id, None)
 
     r = {
       "land": source_routes.get("land", {}).get(target_id),
-      "air": source_routes.get("air", {}).get(target_id),
+      "air": air_routes,
       "sea": source_routes.get("sea", {}).get(target_id)
     }
 
