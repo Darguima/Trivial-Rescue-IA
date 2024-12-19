@@ -2,7 +2,6 @@ from map import Map
 from utils.distance_between_coords import distance_between_coords
 
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
-from vehicles.choose_best_route import choose_best_route
 from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
@@ -15,13 +14,18 @@ def depth_first_search(map: Map, end_city_id: str):
     truck_route = [Truck(map, path[i], path[i + 1]) for i in range(len(path) - 1)]
     helicopter_route = [Helicopter(map, path[0], path[-1])]
 
-    print("\nCar cost of the path:", sum_vehicles_cost(car_route))
-    print("Truck cost of the path:", sum_vehicles_cost(truck_route))
-    print("Helicopter cost of the path:", sum_vehicles_cost(helicopter_route))
+    car_cost = sum_vehicles_cost(car_route)
+    truck_cost = sum_vehicles_cost(truck_route)
+    helicopter_cost = sum_vehicles_cost(helicopter_route)
 
-    best_route_i, best_route = choose_best_route([car_route, truck_route, helicopter_route])
+    print("\nRoute costs for each vehicle: (None is not possible routes)")
+    print("\nCar cost of the path:", car_cost)
+    print("Truck cost of the path:", truck_cost)
+    print("Helicopter cost of the path:", helicopter_cost)
 
-    print("\nBest route: (index start at 0)", best_route_i)
+    best_route = min([car_cost, truck_cost, helicopter_cost], key=lambda cost: cost.get_final_cost())
+
+    print("\nBest route: (index start at 0)", best_route)
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
