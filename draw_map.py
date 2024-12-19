@@ -1,10 +1,14 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from typing import Literal
 
 from map import Map
 
-def draw_map(map: Map):
+def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", print_progress: bool = True):
+  if not print_progress:
+    print = lambda *args, **kwargs: None
+
   G = nx.Graph()
 
   print("Preparing to draw the map.", end="\r")
@@ -13,7 +17,8 @@ def draw_map(map: Map):
 
     city_id = city["id"]
 
-    x, y = city['matrix_coords']
+    draw_type = "map_coords" if map_type == "real" else "matrix_coords"
+    x, y = city[draw_type]
     G.add_node(str(city_id), pos=(x, y), place_data=city, name=city['name'])
 
     for neighbor_id in city["neighbors"]["land"]:

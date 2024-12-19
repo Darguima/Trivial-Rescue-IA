@@ -4,6 +4,10 @@ from json import dumps as json_dumps
 
 from map import Map
 from draw_map import draw_map
+from vehicles.car import Car
+from vehicles.sum_vehicles_cost import sum_vehicles_cost
+
+from algorithms.DFS import depth_first_search
 
 def interface(map: Map):
   clear()
@@ -13,18 +17,24 @@ def interface(map: Map):
 
   print("Select an option:\n")
 
-  print("1. Draw map")
-  print("2. Get Info about city")
-  print("3. Get Info about route")
-  print("4. Tests")
+  print("1. Draw matrix map")
+  print("2. Draw real map")
+  print("3. Get Info about city")
+  print("4. Get Info about route")
+  print("5. Depth First Search")
+  print("6. Code Examples")
 
   option = input("\nOption: ")
 
   if option == "1":
-    job_for_another_core = multiprocessing.Process(target=draw_map, args=(map,))
+    job_for_another_core = multiprocessing.Process(target=draw_map, args=(map, "matrix", False))
     job_for_another_core.start()
   
   elif option == "2":
+    job_for_another_core = multiprocessing.Process(target=draw_map, args=(map, "real", False))
+    job_for_another_core.start()
+  
+  elif option == "3":
     city_id = input("\nCity ID: ")
 
     try:
@@ -42,7 +52,7 @@ def interface(map: Map):
 
     press_to_continue()
   
-  elif option == "3":
+  elif option == "4":
     city_id_1 = input("\nCity ID 1: ")
     city_id_2 = input("City ID 2: ")
 
@@ -57,15 +67,25 @@ def interface(map: Map):
 
     press_to_continue()
   
-  elif option == "4":
+  elif option == "5":
+    city_id = input("\nDestination City ID: ")
+
+    try:
+      depth_first_search(map, city_id)
+
+    except Exception as e:
+      print(f"\nError: {e}")
+
+    press_to_continue()
+  
+  elif option == "6":
     print(map.get_city_by_id(0))
     print(map.get_city_by_id(19))
     # print(map.get_all_cities())
     print(map.get_routes_between_cities(0, 1))
-    print(map.get_routes_between_cities(19, 20))
 
-    # route = [Car(map, 11, 7), Car(map, 7, 2), Truck(map, 2, 1), Truck(map, 1, 0)]
-    # print(sum_vehicles_cost(route))
+    route = [Car(map, 0, 1)]
+    print(sum_vehicles_cost(route))
 
     press_to_continue() 
   

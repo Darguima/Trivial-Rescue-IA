@@ -11,7 +11,7 @@ class Helicopter():
   TANK_LITERS_CAPACITY = 2_500
 
   def __init__(self, map: Map, starting_node: str, ending_node: str):
-    self.route = map.get_route(starting_node, ending_node)["air"]
+    self.route = map.get_routes_between_cities(starting_node, ending_node)["air"]
 
     if not self.route:
       raise Exception("Route not found")
