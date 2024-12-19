@@ -1,4 +1,4 @@
-# parametros da rota que ainda nao foram usados - catástrofe
+from map import Map
 
 class Boat():
   MAX_SPEED = 40
@@ -10,8 +10,11 @@ class Boat():
   FILL_TANK_PENALTY = 10
   TANK_LITERS_CAPACITY = 3_000_000
 
-  def __init__(self, map, starting_node, ending_node):
+  def __init__(self, map: Map, starting_node: str, ending_node: str):
     self.route = map.get_route(starting_node, ending_node)["sea"]
+
+    if not self.route:
+      raise Exception("Route not found")
 
     print(self.route)
 

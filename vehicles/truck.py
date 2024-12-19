@@ -1,4 +1,4 @@
-# parametros da rota que ainda nao foram usados - catástrofe, transito???, 
+from map import Map
 
 class Truck():
   MAX_SPEED = 90
@@ -10,8 +10,11 @@ class Truck():
   FILL_TANK_PENALTY = 0.16 # 10 minutes
   TANK_LITERS_CAPACITY = 350
 
-  def __init__(self, map, starting_node, ending_node):
-    self.route = map.get_route(starting_node, ending_node)["land"]
+  def __init__(self, map: Map, starting_node: str, ending_node: str):
+    self.route = map.get_routes_between_cities(starting_node, ending_node)["land"]
+
+    if not self.route:
+      raise Exception("Route not found")
 
     self.distance = self.route["distance"]
     self.road_quality = self.route["road_quality"]

@@ -24,9 +24,7 @@ def sum_vehicles_cost(vehicles: List[Car]):
     if type_vehicle_changed:
       cost["time"] += vehicle.TRANSHIPMENT_PENALTY
   
-    print(liters_spent_on_last_vehicle, vehicle.TANK_LITERS_CAPACITY)
     if liters_spent_on_last_vehicle > vehicle.TANK_LITERS_CAPACITY:
-      print("FILLING TANK")
       cost["time"] += vehicle.STOP_PENALTY
       cost["time"] += vehicle.FILL_TANK_PENALTY
       liters_spent_on_last_vehicle -= vehicle.TANK_LITERS_CAPACITY

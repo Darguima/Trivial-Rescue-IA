@@ -1,58 +1,37 @@
+from _types.map_types import CitiesDict, City, RoutesDict, RouteBetweenCities
+
 class Map:
-  def __init__(self, places, routes):
-    self.__places = places
-    self.__routes = routes
-
-  def get_place_id_by_name(self, name):
-    for place_id, place in enumerate(self.__places):
-      if place["name"] == name:
-        return place_id
+  def __init__(self, cities, routes):
+    self.__cities: CitiesDict = cities
+    self.__routes: RoutesDict = routes
   
-  def get_place_by_name(self, name):
-      return self.__places[self.get_place_id_by_name(name)]
+  def get_city_by_id(self, city_id: str) -> City:
+    """
+    Will return the city info, given its id.
+    If doesn't exist, will return None.
+    """
+    return self.__cities[str(city_id)]
+
+  def get_all_cities(self) -> list[City]:
+    """
+    Returns a list with all cities on the map.
+    """
+    return list(self.__cities.values())
   
-  def get_all_places_ids(self):
-    return range(len(self.__places))
+  def get_routes_between_cities(self, city_id1: str, city_id2: str) -> RouteBetweenCities:
+    """
+    Returns the land, air and sea routes between two cities.
+    """
 
-  def get_place_by_id(self, id):
-    return self.__places[id]
+    source_id = str(max(int(city_id1), int(city_id2)))
+    target_id = str(min(int(city_id1), int(city_id2)))
 
-  def get_neighbors_ids_by_place_id(self, id):
-    neighbors = {
-      "land": [],
-      "air": [],
-      "sea": []
-    } 
+    source_routes = self.__routes[source_id]
 
-    # The neighbors with lower id
-    for possible_neighbor_id, possible_neighbor in enumerate(self.__routes[id]):
-      if (possible_neighbor["land"] != None):
-        neighbors["land"].append(possible_neighbor_id)
-      if (possible_neighbor["air"] != None):
-        neighbors["air"].append(possible_neighbor_id)
-      if (possible_neighbor["sea"] != None):
-        neighbors["sea"].append(possible_neighbor_id)
-    
-    for possible_neighbor_id in range(id + 1, len(self.__routes)):
-      possible_neighbor = self.__routes[possible_neighbor_id][id]
+    r = {
+      "land": source_routes.get("land", {}).get(target_id),
+      "air": source_routes.get("air", {}).get(target_id),
+      "sea": source_routes.get("sea", {}).get(target_id)
+    }
 
-      if (possible_neighbor["land"] != None):
-        neighbors["land"].append(possible_neighbor_id)
-      if (possible_neighbor["air"] != None):
-        neighbors["air"].append(possible_neighbor_id)
-      if (possible_neighbor["sea"] != None):
-        neighbors["sea"].append(possible_neighbor_id)
-
-    return neighbors
-  
-  def get_route(self, place_a, place_b):
-    if place_a == place_b:
-      return None
-    
-    src = max(place_a, place_b)
-    dst = min(place_a, place_b)
-
-    if src >= len(self.__routes):
-      raise IndexError("The place with the id " + str(src) + " does not exist")
-
-    return self.__routes[src][dst]
+    return r

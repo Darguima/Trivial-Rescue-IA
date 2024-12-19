@@ -7,24 +7,25 @@ from map import Map
 def draw_map(map: Map):
   G = nx.Graph()
 
-  print("Preparing to draw the map.")
-  for place_id in map.get_all_places_ids():
-    place = map.get_place_by_id(place_id)
-    print(f"Adding {place['name']} to the map.", end="\r")
+  print("Preparing to draw the map.", end="\r")
+  for city in map.get_all_cities():
+    print(f"Adding {city['name']} to the map.", end="\r")
 
-    x, y = place['coords']
-    G.add_node(int(place_id), pos=(x, y), place_data=place, name=place['name'])
+    city_id = city["id"]
 
-    for neighbor_id in map.get_neighbors_ids_by_place_id(place_id)["land"]:
-      route = map.get_route(place_id, neighbor_id)
-      G.add_edge(place_id, neighbor_id, route_data=route["land"])
+    x, y = city['matrix_coords']
+    G.add_node(str(city_id), pos=(x, y), place_data=city, name=city['name'])
 
-  print("")
+    for neighbor_id in city["neighbors"]["land"]:
+      road = map.get_routes_between_cities(city_id, neighbor_id)["land"]
+      G.add_edge(str(city_id), str(neighbor_id), route_data=road)
+
+  print("Map drawn.                           ", end="\r")
 
   pos = nx.get_node_attributes(G, 'pos')
 
   place_sizes = [G.nodes[node]["place_data"]['population'] / 5000 for node in G.nodes]  # Adjust size by population
-  place_colors = ["r" if G.nodes[node]["place_data"]['is_capital'] else 'b' for node in G.nodes]
+  place_colors = ["r" if G.nodes[node]["place_data"]['capital_info'] != None else 'b' for node in G.nodes]
 
   speed_colors = {50: "g", 90: "y", 100: "m", 120: "r"}
   route_colors = [speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges]  # Adjust size by population
@@ -50,8 +51,6 @@ def draw_map(map: Map):
     borderaxespad=0.0             # Padding between the legend and the plot
   )
 
-
-  
   # Clean up plot to remove axis and spines
   plt.gca().set_xticks([])
   plt.gca().set_yticks([])

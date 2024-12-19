@@ -1,4 +1,4 @@
-# parametros da rota que ainda nao foram usados - catástrofe
+from map import Map
 
 class Helicopter():
   MAX_SPEED = 300
@@ -10,8 +10,11 @@ class Helicopter():
   FILL_TANK_PENALTY = 0.12 # 7 minutes
   TANK_LITERS_CAPACITY = 2_500
 
-  def __init__(self, map, starting_node, ending_node):
+  def __init__(self, map: Map, starting_node: str, ending_node: str):
     self.route = map.get_route(starting_node, ending_node)["air"]
+
+    if not self.route:
+      raise Exception("Route not found")
 
     self.distance = self.route["distance"]
 
