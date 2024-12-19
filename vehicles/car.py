@@ -1,6 +1,7 @@
 from map import Map
+from vehicles.vehicle import Vehicle
 
-class Car():
+class Car(Vehicle):
   MAX_SPEED = 200
   FUEL_LITERS_PER_100KM = 6
   FUEL_LITER_COST = 1.8
