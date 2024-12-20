@@ -40,13 +40,13 @@ def interface(map: Map):
 
     if option == "1":
         job_for_another_core = multiprocessing.Process(
-            target=draw_map, args=(map, "matrix", False)
+            target=draw_map, args=(map, "matrix")
         )
         job_for_another_core.start()
 
     elif option == "2":
         job_for_another_core = multiprocessing.Process(
-            target=draw_map, args=(map, "real", False)
+            target=draw_map, args=(map, "real")
         )
         job_for_another_core.start()
 
@@ -96,7 +96,9 @@ def interface(map: Map):
         groceries_tons = int(input("\nTons of grocery: "))
 
         try:
-            depth_first_search(map, city_id, groceries_tons)
+            path = depth_first_search(map, city_id, groceries_tons)
+            
+            do_you_want_draw_the_path(map, path)
 
         except Exception as e:
             print(f"\nError: {e}")
@@ -107,9 +109,9 @@ def interface(map: Map):
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
-        breath_first_search(map, city_id, groceries_tons)
+        path = breath_first_search(map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
         try:
-            # breath_first_search(map, city_id, groceries_tons)
             ...
 
         except Exception as e:
@@ -121,7 +123,8 @@ def interface(map: Map):
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
-        A_star(map, city_id, groceries_tons)
+        path = A_star(map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
         try:
             # A_star(map, city_id, groceries_tons)
             ...
@@ -135,7 +138,8 @@ def interface(map: Map):
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
-        dionisio(map, city_id, groceries_tons)
+        path = dionisio(map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
         try:
             # dionisio(map, city_id, groceries_tons)
             ...
@@ -149,7 +153,8 @@ def interface(map: Map):
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
-        dario(map, city_id, groceries_tons)
+        path = dario(map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
         try:
             # dario(map, city_id, groceries_tons)
             ...
@@ -188,3 +193,18 @@ def press_to_continue():
 
 def print_dict(dict):
     print(json_dumps(dict, indent=2))
+
+def do_you_want_draw_the_path(map, path):
+    if path is None:
+        return
+
+    answer = input("\nDo you want to draw the path? (y/N) ")
+
+    if answer == "y":
+        job = multiprocessing.Process(
+            target=draw_map, args=(map, "real", path)
+        )
+        job.start()
+    else:
+        pass
+    return

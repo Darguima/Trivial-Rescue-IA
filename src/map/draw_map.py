@@ -5,21 +5,10 @@ from typing import Literal
 
 from map.map import Map
 
-
-def draw_map(
-    map: Map,
-    map_type: Literal["matrix", "real"] = "matrix",
-    print_progress: bool = True,
-):
-    if not print_progress:
-        print = lambda *args, **kwargs: None
-
+def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", path=None):
     G = nx.Graph()
 
-    print("Preparing to draw the map.", end="\r")
     for city in map.get_all_cities():
-        print(f"Adding {city['name']} to the map.", end="\r")
-
         city_id = city["id"]
 
         draw_type = "map_coords" if map_type == "real" else "matrix_coords"
@@ -29,8 +18,6 @@ def draw_map(
         for neighbor_id in city["neighbors"]["land"]:
             road = map.get_routes_between_cities(city_id, neighbor_id)["land"]
             G.add_edge(city_id, neighbor_id, route_data=road)
-
-    print("Map drawn.                           ", end="\r")
 
     pos = nx.get_node_attributes(G, "pos")
 
@@ -45,7 +32,15 @@ def draw_map(
     speed_colors = {50: "g", 90: "y", 100: "m", 120: "r"}
     route_colors = [
         speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges
-    ]  # Adjust size by population
+    ] # Adjust size by population
+
+    # Highlight path edges
+    if path:
+        path_edges = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
+        path_edge_colors = "c"  # Cyan for the path
+        nx.draw_networkx_edges(
+            G, pos, edgelist=path_edges, edge_color=path_edge_colors, width=15, alpha=1
+        )
 
     nx.draw_networkx_nodes(
         G, pos, node_color=place_colors, node_size=place_sizes, alpha=0.6
@@ -82,6 +77,7 @@ def draw_map(
             Line2D([0], [0], color="y", lw=3, alpha=0.5, label="90 km/h"),
             Line2D([0], [0], color="m", lw=3, alpha=0.5, label="100 km/h"),
             Line2D([0], [0], color="r", lw=3, alpha=0.5, label="120 km/h"),
+            Line2D([0], [0], color="c", lw=5, alpha=0.8, label="Path"),
         ],
         title="Legend",
         bbox_to_anchor=(0.05, 0.3),  # Fine-tune the legend position (x, y)

@@ -11,6 +11,11 @@ from vehicles.helicopter import Helicopter
 
 def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     path = find_path(map, end_city_id)
+
+    if path is None:
+        print("\nPath not found")
+        return None
+
     print("\nPath found:", path)
 
     car_route = [Car(map, path[i], path[i + 1]) for i in range(len(path) - 1)]
@@ -48,6 +53,7 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     print("\tvehicles needed:", best_cost[1])
     print("\t1 vehicle cost:", best_cost[0].get_final_cost())
 
+    return path
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
