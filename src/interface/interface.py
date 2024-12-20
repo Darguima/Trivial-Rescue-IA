@@ -8,7 +8,7 @@ from vehicles.car import Car
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 
 from algorithms.DFS import depth_first_search
-from algorithms.BFS import breath_first_search
+from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
 from algorithms.dario import dario
 from algorithms.dionisio import dionisio
@@ -29,7 +29,7 @@ def interface(map: Map):
     print("5. Get Info about route")
 
     print("\n6. Algorithm Depth First Search")
-    print("7. Algorithm Breath First Search")
+    print("7. Algorithm Breadth First Search")
     print("8. Algorithm A*")
     print("9. Algorithm (dionisio, inventa um nome para aqui)")
     print("10. Algorithm (à lá Dário)")
@@ -109,7 +109,7 @@ def interface(map: Map):
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
-        path = breath_first_search(map, city_id, groceries_tons)
+        path = breadth_first_search(map, city_id, groceries_tons)
         do_you_want_draw_the_path(map, path)
         try:
             ...
