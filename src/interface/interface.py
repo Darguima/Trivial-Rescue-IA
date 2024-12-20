@@ -156,7 +156,7 @@ def interface(map: Map):
 
   elif option == "0":
     print(map.get_city_by_id(0))
-    print(map.get_city_by_id(19))
+    print(map.get_capitals())
     # print(map.get_all_cities())
     print(map.get_routes_between_cities(0, 1))
 
