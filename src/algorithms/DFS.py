@@ -22,6 +22,8 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     truck_route = [Truck(map, path[i], path[i + 1]) for i in range(len(path) - 1)]
     helicopter_route = [Helicopter(map, path[0], path[-1])]
 
+    # ⚠️⚠️⚠️ aqui seria preciso verificar se o número de veículos necessário existe na capital que foi escolhida
+    # ⚠️⚠️⚠️ se nao existir, teria de ser None
     cars_qnt_needed = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
