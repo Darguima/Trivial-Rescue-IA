@@ -42,10 +42,9 @@ def draw_map(
 
     # Highlight path edges with different colors for different vehicles
     if path:
-        path_edges = []
         for vehicle_route in path:
             vehicle_color = vehicle_route.COLOR
-            path_edges.append((vehicle_route.starting_node, vehicle_route.ending_node))
+            path_edges = [(vehicle_route.starting_node, vehicle_route.ending_node)]
             nx.draw_networkx_edges(
                 G, pos, edgelist=path_edges, edge_color=vehicle_color, width=15, alpha=1
             )
