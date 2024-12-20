@@ -11,4 +11,4 @@ routes_dict = load(open("src/maps_examples/random_cities_routes.json"))
 map = Map(cities_dict, routes_dict)
 
 while True:
-  interface(map)
+    interface(map)
