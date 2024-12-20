@@ -11,6 +11,8 @@ class Boat(Vehicle):
   FILL_TANK_PENALTY = 10
   TANK_LITERS_CAPACITY = 3_000_000
 
+  MAX_CAPACITY_TONS = 10_000
+
   def __init__(self, map: Map, starting_node: str, ending_node: str):
     self.route = map.get_route(starting_node, ending_node)["sea"]
 

@@ -11,6 +11,8 @@ class Car(Vehicle):
   FILL_TANK_PENALTY = 0.033 # 2 minutes
   TANK_LITERS_CAPACITY = 50
 
+  MAX_CAPACITY_TONS = 0.5
+
   def __init__(self, map: Map, starting_node: str, ending_node: str):
     self.route = map.get_routes_between_cities(starting_node, ending_node)["land"]
 

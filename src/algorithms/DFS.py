@@ -1,3 +1,5 @@
+import math
+
 from map.map import Map
 from utils.distance_between_coords import distance_between_coords
 
@@ -14,6 +16,10 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     truck_route = [Truck(map, path[i], path[i + 1]) for i in range(len(path) - 1)]
     helicopter_route = [Helicopter(map, path[0], path[-1])]
 
+    cars_qnt_needed = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
+    trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
+    helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
+
     car_cost = sum_vehicles_cost(car_route)
     truck_cost = sum_vehicles_cost(truck_route)
     helicopter_cost = sum_vehicles_cost(helicopter_route)
@@ -23,11 +29,16 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     print("Truck cost of the path:", truck_cost)
     print("Helicopter cost of the path:", helicopter_cost)
 
-    options = [car_cost, truck_cost, helicopter_cost]
-    options = [option for option in options if option is not None]
-    best_route = min(options)
+    options = [(car_cost, cars_qnt_needed), (truck_cost, trucks_qnt_needed), (helicopter_cost, helicopters_qnt_needed)]
+    options = [option for option in options if option[0] is not None]
 
-    print("\nBest route: ", best_route)
+    best_index, best_cost = min(enumerate(options), key=lambda option: option[1][0].get_final_cost() * option[1][1])
+
+    print(f"\nBest route:")
+    print("\tindex:", best_index)
+    print("\tfinal cost:", best_cost[0].get_final_cost())
+    print("\tvehicles needed:", best_cost[1])
+    print("\t1 vehicle cost:", best_cost[0].get_final_cost())
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)

@@ -88,7 +88,7 @@ def interface(map: Map):
   
   elif option == "6":
     city_id = input("\nDestination City ID: ")
-    groceries_tons = input("\nTons of grocery: ")
+    groceries_tons = int(input("\nTons of grocery: "))
 
     try:
       depth_first_search(map, city_id, groceries_tons)
@@ -100,7 +100,7 @@ def interface(map: Map):
   
   elif option == "7":
     city_id = input("\nDestination City ID: ")
-    groceries_tons = input("\nTons of grocery: ")
+    groceries_tons = int(input("\nTons of grocery: "))
 
     breath_first_search(map, city_id, groceries_tons)
     try:
@@ -114,7 +114,7 @@ def interface(map: Map):
   
   elif option == "8":
     city_id = input("\nDestination City ID: ")
-    groceries_tons = input("\nTons of grocery: ")
+    groceries_tons = int(input("\nTons of grocery: "))
 
     A_star(map, city_id, groceries_tons)
     try:
@@ -128,7 +128,7 @@ def interface(map: Map):
 
   elif option == "9":
     city_id = input("\nDestination City ID: ")
-    groceries_tons = input("\nTons of grocery: ")
+    groceries_tons = int(input("\nTons of grocery: "))
 
     dionisio(map, city_id, groceries_tons)
     try:
@@ -142,7 +142,7 @@ def interface(map: Map):
 
   elif option == "10":
     city_id = input("\nDestination City ID: ")
-    groceries_tons = input("\nTons of grocery: ")
+    groceries_tons = int(input("\nTons of grocery: "))
 
     dario(map, city_id, groceries_tons)
     try:
