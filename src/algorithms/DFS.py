@@ -6,7 +6,7 @@ from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 
-def depth_first_search(map: Map, end_city_id: str):
+def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     path = find_path(map, end_city_id)
     print("\nPath found:", path)
 

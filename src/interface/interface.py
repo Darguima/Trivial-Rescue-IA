@@ -8,6 +8,10 @@ from vehicles.car import Car
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 
 from algorithms.DFS import depth_first_search
+from algorithms.BFS import breath_first_search
+from algorithms.A_star import A_star
+from algorithms.dario import dario
+from algorithms.dionisio import dionisio
 
 def interface(map: Map):
   clear()
@@ -20,9 +24,16 @@ def interface(map: Map):
   print("1. Draw matrix map")
   print("2. Draw real map")
   print("3. Get Info about city")
-  print("4. Get Info about route")
-  print("5. Depth First Search")
-  print("6. Code Examples")
+  print("4. Get capitals cities")
+  print("5. Get Info about route")
+
+  print("\n6. Algorithm Depth First Search")
+  print("7. Algorithm Breath First Search")
+  print("8. Algorithm A*")
+  print("9. Algorithm (dionisio, inventa um nome para aqui)")
+  print("10. Algorithm (à lá Dário)")
+
+  print("\n0. Code Examples")
 
   option = input("\nOption: ")
 
@@ -53,6 +64,14 @@ def interface(map: Map):
     press_to_continue()
   
   elif option == "4":
+    capitals = map.get_capitals()
+
+    print("\nCapitals IDs:")
+    print_dict([capital["id"] for capital in capitals])
+
+    press_to_continue()
+  
+  elif option == "5":
     city_id_1 = input("\nCity ID 1: ")
     city_id_2 = input("City ID 2: ")
 
@@ -67,18 +86,75 @@ def interface(map: Map):
 
     press_to_continue()
   
-  elif option == "5":
+  elif option == "6":
     city_id = input("\nDestination City ID: ")
+    groceries_tons = input("\nTons of grocery: ")
 
     try:
-      depth_first_search(map, city_id)
+      depth_first_search(map, city_id, groceries_tons)
 
     except Exception as e:
       print(f"\nError: {e}")
 
     press_to_continue()
   
-  elif option == "6":
+  elif option == "7":
+    city_id = input("\nDestination City ID: ")
+    groceries_tons = input("\nTons of grocery: ")
+
+    breath_first_search(map, city_id, groceries_tons)
+    try:
+      # breath_first_search(map, city_id, groceries_tons)
+      ...
+
+    except Exception as e:
+      print(f"\nError: {e}")
+
+    press_to_continue()
+  
+  elif option == "8":
+    city_id = input("\nDestination City ID: ")
+    groceries_tons = input("\nTons of grocery: ")
+
+    A_star(map, city_id, groceries_tons)
+    try:
+      # A_star(map, city_id, groceries_tons)
+      ...
+
+    except Exception as e:
+      print(f"\nError: {e}")
+
+    press_to_continue()
+
+  elif option == "9":
+    city_id = input("\nDestination City ID: ")
+    groceries_tons = input("\nTons of grocery: ")
+
+    dionisio(map, city_id, groceries_tons)
+    try:
+      # dionisio(map, city_id, groceries_tons)
+      ...
+
+    except Exception as e:
+      print(f"\nError: {e}")
+
+    press_to_continue()
+
+  elif option == "10":
+    city_id = input("\nDestination City ID: ")
+    groceries_tons = input("\nTons of grocery: ")
+
+    dario(map, city_id, groceries_tons)
+    try:
+      # dario(map, city_id, groceries_tons)
+      ...
+
+    except Exception as e:
+      print(f"\nError: {e}")
+
+    press_to_continue()
+
+  elif option == "0":
     print(map.get_city_by_id(0))
     print(map.get_city_by_id(19))
     # print(map.get_all_cities())
