@@ -97,7 +97,7 @@ def interface(map: Map):
 
         try:
             path = depth_first_search(map, city_id, groceries_tons)
-            
+
             do_you_want_draw_the_path(map, path)
 
         except Exception as e:
@@ -194,6 +194,7 @@ def press_to_continue():
 def print_dict(dict):
     print(json_dumps(dict, indent=2))
 
+
 def do_you_want_draw_the_path(map, path):
     if path is None:
         return
@@ -201,9 +202,7 @@ def do_you_want_draw_the_path(map, path):
     answer = input("\nDo you want to draw the path? (y/N) ")
 
     if answer == "y":
-        job = multiprocessing.Process(
-            target=draw_map, args=(map, "real", path)
-        )
+        job = multiprocessing.Process(target=draw_map, args=(map, "real", path))
         job.start()
     else:
         pass

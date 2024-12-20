@@ -10,5 +10,6 @@ def A_star(map: Map, end_city_id: str, groceries_tons: int):
     # or none if the path is not possible
     return path
 
+
 def find_path(map: Map, end_city_id: str):
     return []

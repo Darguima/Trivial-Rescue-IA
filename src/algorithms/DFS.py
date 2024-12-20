@@ -55,6 +55,7 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
 
     return path
 
+
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
 

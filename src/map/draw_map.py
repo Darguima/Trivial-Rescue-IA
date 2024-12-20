@@ -5,6 +5,7 @@ from typing import Literal
 
 from map.map import Map
 
+
 def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", path=None):
     G = nx.Graph()
 
@@ -32,7 +33,7 @@ def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", path=None
     speed_colors = {50: "g", 90: "y", 100: "m", 120: "r"}
     route_colors = [
         speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges
-    ] # Adjust size by population
+    ]  # Adjust size by population
 
     # Highlight path edges
     if path:
