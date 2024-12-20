@@ -14,7 +14,11 @@ class Truck(Vehicle):
 
     MAX_CAPACITY_TONS = 8
 
+    COLOR = "goldenrod"
+
     def __init__(self, map: Map, starting_node: str, ending_node: str):
+        super().__init__(map, starting_node, ending_node)
+
         self.route = map.get_routes_between_cities(starting_node, ending_node)["land"]
 
         if not self.route:

@@ -36,9 +36,9 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     print("Helicopter cost of the path:", helicopter_cost)
 
     options = [
-        (car_cost, cars_qnt_needed),
-        (truck_cost, trucks_qnt_needed),
-        (helicopter_cost, helicopters_qnt_needed),
+        (car_cost, cars_qnt_needed, car_route),
+        (truck_cost, trucks_qnt_needed, truck_route),
+        (helicopter_cost, helicopters_qnt_needed, helicopter_route),
     ]
     options = [option for option in options if option[0] is not None]
 
@@ -53,7 +53,7 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     print("\tvehicles needed:", best_cost[1])
     print("\t1 vehicle cost:", best_cost[0].get_final_cost())
 
-    return path
+    return options[best_index][2]
 
 
 def find_path(map: Map, end_city_id: str):

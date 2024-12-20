@@ -14,7 +14,11 @@ class Boat(Vehicle):
 
     MAX_CAPACITY_TONS = 10_000
 
+    COLOR = "darkblue"
+
     def __init__(self, map: Map, starting_node: str, ending_node: str):
+        super().__init__(map, starting_node, ending_node)
+
         self.route = map.get_route(starting_node, ending_node)["sea"]
 
         if not self.route:

@@ -1,12 +1,17 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-from typing import Literal
+from typing import Literal, Optional
 
 from map.map import Map
+from vehicles.sum_vehicles_cost import Cost
 
 
-def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", path=None):
+def draw_map(
+    map: Map,
+    map_type: Literal["matrix", "real"] = "matrix",
+    path: Optional[Cost] = None,
+):
     G = nx.Graph()
 
     for city in map.get_all_cities():
@@ -35,13 +40,15 @@ def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", path=None
         speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges
     ]  # Adjust size by population
 
-    # Highlight path edges
+    # Highlight path edges with different colors for different vehicles
     if path:
-        path_edges = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
-        path_edge_colors = "c"  # Cyan for the path
-        nx.draw_networkx_edges(
-            G, pos, edgelist=path_edges, edge_color=path_edge_colors, width=15, alpha=1
-        )
+        path_edges = []
+        for vehicle_route in path:
+            vehicle_color = vehicle_route.COLOR
+            path_edges.append((vehicle_route.starting_node, vehicle_route.ending_node))
+            nx.draw_networkx_edges(
+                G, pos, edgelist=path_edges, edge_color=vehicle_color, width=15, alpha=1
+            )
 
     nx.draw_networkx_nodes(
         G, pos, node_color=place_colors, node_size=place_sizes, alpha=0.6
@@ -78,7 +85,6 @@ def draw_map(map: Map, map_type: Literal["matrix", "real"] = "matrix", path=None
             Line2D([0], [0], color="y", lw=3, alpha=0.5, label="90 km/h"),
             Line2D([0], [0], color="m", lw=3, alpha=0.5, label="100 km/h"),
             Line2D([0], [0], color="r", lw=3, alpha=0.5, label="120 km/h"),
-            Line2D([0], [0], color="c", lw=5, alpha=0.8, label="Path"),
         ],
         title="Legend",
         bbox_to_anchor=(0.05, 0.3),  # Fine-tune the legend position (x, y)

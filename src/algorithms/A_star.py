@@ -6,8 +6,8 @@ def A_star(map: Map, end_city_id: str, groceries_tons: int):
 
     print("\nPath found:", path)
 
-    # must return a list of the cities ids that are part of the path, in order, to draw the path
-    # or none if the path is not possible
+    # must return a list of vehicles - to draw the path, or None if it wasnt possible to find a path
+    # example of return - [Car(map, 0, 1), Car(...), Truck(...), Helicopter(...)]
     return path
 
 
