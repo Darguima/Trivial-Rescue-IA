@@ -28,6 +28,8 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
 
+    print("car_route", car_route)
+
     car_cost = sum_vehicles_cost(car_route)
     truck_cost = sum_vehicles_cost(truck_route)
     helicopter_cost = sum_vehicles_cost(helicopter_route)
