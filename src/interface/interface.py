@@ -11,7 +11,7 @@ from algorithms.DFS import depth_first_search
 from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
 from algorithms.dario import dario
-from algorithms.dionisio import dionisio
+from algorithms.greedy import greedy
 
 
 def interface(map: Map):
@@ -31,7 +31,7 @@ def interface(map: Map):
     print("\n6. Algorithm Depth First Search")
     print("7. Algorithm Breadth First Search")
     print("8. Algorithm A*")
-    print("9. Algorithm (dionisio, inventa um nome para aqui)")
+    print("9. Algorithm greedy (dionisio, inventa um nome para aqui)")
     print("10. Algorithm (à lá Dário)")
 
     print("\n0. Code Examples")
@@ -138,7 +138,7 @@ def interface(map: Map):
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
-        path = dionisio(map, city_id, groceries_tons)
+        path = greedy(map, city_id, groceries_tons)
         do_you_want_draw_the_path(map, path)
         try:
             # dionisio(map, city_id, groceries_tons)
@@ -171,7 +171,7 @@ def interface(map: Map):
         print(map.get_routes_between_cities(0, 1))
 
         route = [Car(map, 0, 1)]
-        print(sum_vehicles_cost(route))
+        print(sum_vehicles_cost(route, None))
 
         press_to_continue()
 
