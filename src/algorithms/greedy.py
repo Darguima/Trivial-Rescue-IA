@@ -101,6 +101,10 @@ def greedy(map: Map, end_city_id: str, groceries_tons: int):
     route1_cost = sum_vehicles_cost(route1, num_vehicles_route1)
     route2_cost = sum_vehicles_cost(route2, num_vehicles_route2)
 
+    route1_cost = route1_cost.get_final_cost() / len(route1)
+    route2_cost = route2_cost.get_final_cost() / len(route2)
+
+
     # Print route and cost details
     print("\nRoute1 (Cars preferred):", route1)
     print("Route2 (Trucks preferred):", route2)
