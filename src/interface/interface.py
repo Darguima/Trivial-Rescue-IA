@@ -12,6 +12,7 @@ from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
 from algorithms.dario import dario
 from algorithms.dionisio import dionisio
+from algorithms.Dijkstra import dijkstra
 
 
 def interface(map: Map):
@@ -33,6 +34,7 @@ def interface(map: Map):
     print("8. Algorithm A*")
     print("9. Algorithm (dionisio, inventa um nome para aqui)")
     print("10. Algorithm (à lá Dário)")
+    print("11. Algorithm Dijkstra")
 
     print("\n0. Code Examples")
 
@@ -162,6 +164,19 @@ def interface(map: Map):
         except Exception as e:
             print(f"\nError: {e}")
 
+        press_to_continue()
+
+    elif option == "11":
+        city_id = input("\nDestination City ID: ")
+        groceries_tons = int(input("\nTons of grocery: "))
+
+        path = dijkstra(map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
+        try:
+            # dario(map, city_id, groceries
+            ...
+        except Exception as e:
+            print(f"\nError: {e}")
         press_to_continue()
 
     elif option == "0":
