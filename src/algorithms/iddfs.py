@@ -8,8 +8,7 @@ from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 
-
-def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
+def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     path = find_path(map, end_city_id)
 
     if path is None:
@@ -22,17 +21,27 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     truck_route = [Truck(map, path[i], path[i + 1]) for i in range(len(path) - 1)]
     helicopter_route = [Helicopter(map, path[0], path[-1])]
 
-    # ⚠️⚠️⚠️ aqui seria preciso verificar se o número de veículos necessário existe na capital que foi escolhida
-    # ⚠️⚠️⚠️ se nao existir, teria de ser None. Para verificar isso tem a info em map.get_city_by_id(capital_id)["capital_info"]
+    # Verificar se o número de veículos necessário existe na capital que foi escolhida
+    start_city_id = path[0]
+    capital_info = map.get_city_by_id(start_city_id)["capital_info"]
     cars_qnt_needed = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
 
-    print("car_route", car_route)
+    if capital_info["cars"] < cars_qnt_needed:
+        car_cost = None
+    else:
+        car_cost = sum_vehicles_cost(car_route, [cars_qnt_needed] * len(car_route))
 
-    car_cost = sum_vehicles_cost(car_route, [cars_qnt_needed] * len(car_route))
-    truck_cost = sum_vehicles_cost(truck_route, [trucks_qnt_needed] * len(truck_route))
-    helicopter_cost = sum_vehicles_cost(helicopter_route, [helicopters_qnt_needed] * len(helicopter_route))
+    if capital_info["trucks"] < trucks_qnt_needed:
+        truck_cost = None
+    else:
+        truck_cost = sum_vehicles_cost(truck_route, [trucks_qnt_needed] * len(truck_route))
+
+    if capital_info["helicopters"] < helicopters_qnt_needed:
+        helicopter_cost = None
+    else:
+        helicopter_cost = sum_vehicles_cost(helicopter_route, [helicopters_qnt_needed] * len(helicopter_route))
 
     print("\nRoute costs for each vehicle: (None is not possible routes)")
     print("\nCar cost of the path:", car_cost)
@@ -59,7 +68,6 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
 
     return options[best_index][2]
 
-
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
 
@@ -72,13 +80,22 @@ def find_path(map: Map, end_city_id: str):
     )
     start_city = nearest_capital
 
-    stack = [start_city]
+    depth = 0
+    while True:
+        result = dls(map, start_city["id"], end_city_id, depth)
+        if result is not None:
+            return result
+        depth += 1
+
+def dls(map: Map, current_city_id: str, end_city_id: str, depth: int):
+    if depth == 0:
+        return None
+    stack = [(current_city_id, 0)]
     visited = set()
-    parent = {start_city["id"]: None}
+    parent = {current_city_id: None}
 
     while stack:
-        current_city = stack.pop()
-        current_city_id = current_city["id"]
+        current_city_id, current_depth = stack.pop()
 
         if current_city_id in visited:
             continue
@@ -92,13 +109,14 @@ def find_path(map: Map, end_city_id: str):
                 path.append(current_city_id)
                 current_city_id = parent[current_city_id]
             path.reverse()
-
             return path
 
-        for neighbor_id in current_city["neighbors"]["land"]:
-            neighbor_id = neighbor_id
-            if neighbor_id not in visited:
-                stack.append(map.get_city_by_id(neighbor_id))
-                parent[neighbor_id] = current_city_id
+        if current_depth < depth:
+            current_city = map.get_city_by_id(current_city_id)
+            for neighbor_id in current_city["neighbors"]["land"]:
+                if neighbor_id not in visited:
+                    stack.append((neighbor_id, current_depth + 1))
+                    parent[neighbor_id] = current_city_id
 
     return None
+

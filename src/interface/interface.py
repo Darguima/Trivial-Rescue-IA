@@ -12,6 +12,8 @@ from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
 from algorithms.dario import dario
 from algorithms.greedy import greedy
+from algorithms.depth_limited_search import depth_limited_search
+from algorithms.iddfs import iddfs
 
 
 def interface(map: Map):
@@ -33,7 +35,8 @@ def interface(map: Map):
     print("8. Algorithm A*")
     print("9. Algorithm greedy (dionisio, inventa um nome para aqui)")
     print("10. Algorithm (à lá Dário)")
-    print ("12. Algorithm A* v2")
+    print ("20. Algorithm Depth Limited Search")
+    print ("21. Algorithm Iterative Deepening Depth First Search")
 
     print("\n0. Code Examples")
 
@@ -166,6 +169,31 @@ def interface(map: Map):
             print(f"\nError: {e}")
 
         press_to_continue()
+    
+    elif option == "20":
+        city_id = input("\nDestination City ID: ")
+        groceries_tons = int(input("\nTons of grocery: "))
+        limit = int(input("\nLimit: "))
+
+        path = depth_limited_search(map, city_id, groceries_tons, limit)
+        do_you_want_draw_the_path(map, path)
+        try:
+            ...
+
+        except Exception as e:
+            print(f"\nError: {e}")
+    
+    elif option == "21":
+        city_id = input("\nDestination City ID: ")
+        groceries_tons = int(input("\nTons of grocery: "))
+
+        path = iddfs(map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
+        try:
+            ...
+
+        except Exception as e:
+            print(f"\nError: {e}")
 
     elif option == "0":
         print(map.get_city_by_id(0))
