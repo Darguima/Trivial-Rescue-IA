@@ -101,21 +101,17 @@ def greedy(map: Map, end_city_id: str, groceries_tons: int):
     route1_cost = sum_vehicles_cost(route1, num_vehicles_route1)
     route2_cost = sum_vehicles_cost(route2, num_vehicles_route2)
 
-    route1_cost = route1_cost.get_final_cost() / len(route1)
-    route2_cost = route2_cost.get_final_cost() / len(route2)
-
-
+    route1_cost = route1_cost.get_final_cost() 
+    route2_cost = route2_cost.get_final_cost()
+   
     # Print route and cost details
     print("\nRoute1 (Cars preferred):", route1)
     print("Route2 (Trucks preferred):", route2)
     print("\nRoute1 cost:", route1_cost)
     print("Route2 cost:", route2_cost)
 
-
     # Return the cheaper route
     return route1 if route1_cost < route2_cost else route2
-
-
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
@@ -128,22 +124,23 @@ def find_path(map: Map, end_city_id: str):
         ),
     )
 
+
     open_list = set([start_city["id"]])
     visited = set([start_city["id"]])
     parent = {start_city["id"]: None}
     current_city = start_city
 
     while open_list:
-        current_city = min_heuristic(map, current_city, visited)
+        current_city = min_heuristic(map, current_city, end_city, visited, avoid_air_routes=True)
         if current_city is None:
-            return None  
-
+            return None
+        print("current_city",current_city)
         if current_city["id"] == end_city_id:
             # Construct the route
             route = []
             while current_city is not None:
                 route.append(current_city["id"])
-                current_city = map.get_city_by_id(parent[current_city["id"]]) if parent.get(current_city["id"]) else None            
+                current_city = map.get_city_by_id(parent[current_city["id"]]) if parent.get(current_city["id"]) else None
             route.append(start_city["id"])
             route.reverse()
 
@@ -157,25 +154,34 @@ def find_path(map: Map, end_city_id: str):
 
         visited.add(current_city["id"])
         open_list.discard(current_city["id"])
+        print("openlist",open_list)
+        print("visited",visited)
+
 
     return None  # Return None if no path is found
 
 
-def min_heuristic(map: Map, city, visited):
+def min_heuristic(map: Map, city, end_city, visited, avoid_air_routes=False):
     heuristic_list = []
 
-    for _, neighbor_ids in city["neighbors"].items():
+    for weather, neighbor_ids in city["neighbors"].items():
         for neighbor_id in neighbor_ids:
+            aux_city = map.get_city_by_id(neighbor_id)
             if neighbor_id not in visited:
-                aux_city = map.get_city_by_id(neighbor_id)
+                # Avoid air routes unless explicitly allowed
+                if avoid_air_routes and weather == "air":
+                    continue
                 heuristic = distance_between_coords(
-                    aux_city["map_coords"], city["map_coords"]
+                    aux_city["map_coords"], end_city["map_coords"]
                 )
-                heuristic_list.append((heuristic, aux_city))
+                heuristic_list.append((heuristic, aux_city, weather))
 
     if not heuristic_list:
+        # If no valid neighbors and air routes were ignored, consider air routes now
+        if avoid_air_routes:
+            return min_heuristic(map, city, end_city, visited, avoid_air_routes=False)
         return None  # No valid neighbors
 
-    heuristic_list.sort(key=lambda x: x[0])
-
+    heuristic_list.sort(key=lambda x: (x[0], x[2] == "air"))  # Sort by heuristic, prioritizing non-air routes
+    print("heuristic_list",heuristic_list)
     return heuristic_list[0][1]  # Return the city with the minimum heuristic
