@@ -126,8 +126,10 @@ def interface(map: Map):
         path = A_star(map, city_id, groceries_tons)
         do_you_want_draw_the_path(map, path)
         try:
-            # A_star(map, city_id, groceries_tons)
             ...
+            
+
+           
 
         except Exception as e:
             print(f"\nError: {e}")
