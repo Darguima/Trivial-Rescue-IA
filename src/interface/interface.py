@@ -33,6 +33,7 @@ def interface(map: Map):
     print("8. Algorithm A*")
     print("9. Algorithm greedy (dionisio, inventa um nome para aqui)")
     print("10. Algorithm (à lá Dário)")
+    print ("11. Algorithm A* crazy")
 
     print("\n0. Code Examples")
 
@@ -176,7 +177,7 @@ def interface(map: Map):
         print(sum_vehicles_cost(route, None))
 
         press_to_continue()
-
+    
 
 def clear():
     if "TERM" not in environ:
