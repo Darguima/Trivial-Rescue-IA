@@ -33,7 +33,7 @@ def interface(map: Map):
     print("8. Algorithm A*")
     print("9. Algorithm greedy (dionisio, inventa um nome para aqui)")
     print("10. Algorithm (à lá Dário)")
-    print ("11. Algorithm A* crazy")
+    print ("12. Algorithm A* v2")
 
     print("\n0. Code Examples")
 
