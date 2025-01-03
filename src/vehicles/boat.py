@@ -36,5 +36,5 @@ class Boat(Vehicle):
         return {"time": time, "fuel_liters": fuel_liters}
         
     def __str__(self):
-        return f"Truck: {self.starting_node} -> {self.ending_node}"
+        return f"Boat: {self.starting_node} -> {self.ending_node}"
 
