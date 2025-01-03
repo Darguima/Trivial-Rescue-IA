@@ -90,7 +90,14 @@ def draw_map(
     ]
 
     if path:
+        already_added = set()
+
         for vehicle_route in path:
+            if vehicle_route.__class__.__name__ in already_added:   
+                continue
+
+            already_added.add(vehicle_route.__class__.__name__)
+
             vehicle_color = vehicle_route.COLOR
             handles.append(
                 Line2D(
