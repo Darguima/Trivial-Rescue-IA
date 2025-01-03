@@ -13,7 +13,9 @@ SPACE_SIZE = (
 MAP_VOID_PROBABILITY = 10  # what % of spaces will be empty
 NOT_ROAD_PROBABILITY = 15  # what % of roads will not be created
 NOT_HARBOR_PROBABILITY = 15  # what % of cities will not have a harbor
-NOT_HARBOR_CONNECTION_PROBABILITY = 75  # what % of harbor connections will not be created
+NOT_HARBOR_CONNECTION_PROBABILITY = (
+    75  # what % of harbor connections will not be created
+)
 CAPITALS_PERCENTAGE = 5  # what % of the cities will be capitals
 CAPITALS_QNT = math.ceil(MATRIX_WIDTH**2 * CAPITALS_PERCENTAGE / 100)
 

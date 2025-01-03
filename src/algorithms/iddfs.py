@@ -5,7 +5,10 @@ from utils.distance_between_coords import distance_between_coords
 
 from typing import Literal
 
-from utils.choose_best_routes_from_multiple_capitals import choose_best_routes_from_multiple_capitals 
+from utils.choose_best_routes_from_multiple_capitals import (
+    choose_best_routes_from_multiple_capitals,
+)
+
 
 def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     end_city_id = str(end_city_id)
@@ -14,16 +17,27 @@ def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     capitals = map.get_capitals()
     nearest_capitals = sorted(
         capitals,
-        key=lambda capital: distance_between_coords(capital["map_coords"], end_city["map_coords"]),
+        key=lambda capital: distance_between_coords(
+            capital["map_coords"], end_city["map_coords"]
+        ),
     )
 
-    multiple_routes = choose_best_routes_from_multiple_capitals(map, nearest_capitals, end_city_id, groceries_tons, find_path)
+    multiple_routes = choose_best_routes_from_multiple_capitals(
+        map, nearest_capitals, end_city_id, groceries_tons, find_path
+    )
 
-    flattened_routes = [vehicle for route_info in multiple_routes for vehicle in route_info["route"]]
+    flattened_routes = [
+        vehicle for route_info in multiple_routes for vehicle in route_info["route"]
+    ]
     return flattened_routes
 
 
-def find_path(map: Map, start_city_id: str, end_city_id: str, route_type: Literal["land", "air", "sea"] = "land"):
+def find_path(
+    map: Map,
+    start_city_id: str,
+    end_city_id: str,
+    route_type: Literal["land", "air", "sea"] = "land",
+):
     start_city = map.get_city_by_id(start_city_id)
 
     depth = 0
@@ -34,7 +48,13 @@ def find_path(map: Map, start_city_id: str, end_city_id: str, route_type: Litera
         depth += 1
 
 
-def dls(map: Map, current_city_id: str, end_city_id: str, depth: int, route_type: Literal["land", "air", "sea"] = "land"):
+def dls(
+    map: Map,
+    current_city_id: str,
+    end_city_id: str,
+    depth: int,
+    route_type: Literal["land", "air", "sea"] = "land",
+):
     if depth == 0:
         return None
     stack = [(current_city_id, 0)]

@@ -3,7 +3,9 @@ from utils.distance_between_coords import distance_between_coords
 
 from typing import Literal
 
-from utils.choose_best_routes_from_multiple_capitals import choose_best_routes_from_multiple_capitals 
+from utils.choose_best_routes_from_multiple_capitals import (
+    choose_best_routes_from_multiple_capitals,
+)
 
 
 def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
@@ -13,16 +15,27 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     capitals = map.get_capitals()
     nearest_capitals = sorted(
         capitals,
-        key=lambda capital: distance_between_coords(capital["map_coords"], end_city["map_coords"]),
+        key=lambda capital: distance_between_coords(
+            capital["map_coords"], end_city["map_coords"]
+        ),
     )
 
-    multiple_routes = choose_best_routes_from_multiple_capitals(map, nearest_capitals, end_city_id, groceries_tons, find_path_dfs)
+    multiple_routes = choose_best_routes_from_multiple_capitals(
+        map, nearest_capitals, end_city_id, groceries_tons, find_path_dfs
+    )
 
-    flattened_routes = [vehicle for route_info in multiple_routes for vehicle in route_info["route"]]
+    flattened_routes = [
+        vehicle for route_info in multiple_routes for vehicle in route_info["route"]
+    ]
     return flattened_routes
 
 
-def find_path_dfs(map: Map, start_city_id: str, end_city_id: str, route_type: Literal["land", "air", "sea"] = "land"):
+def find_path_dfs(
+    map: Map,
+    start_city_id: str,
+    end_city_id: str,
+    route_type: Literal["land", "air", "sea"] = "land",
+):
     start_city = map.get_city_by_id(start_city_id)
 
     stack = [start_city]
