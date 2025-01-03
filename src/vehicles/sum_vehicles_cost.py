@@ -26,11 +26,7 @@ def sum_vehicles_cost(vehicles: List[Vehicle], list_of_number_of_vehicles: List[
     If for some reason the route is invalid, return None. (e.g. an Helicopter runs out of fuel)
     """
     if list_of_number_of_vehicles is None:
-        len_vehicles = len(vehicles)
-        for i in range(len_vehicles):
-            list_of_number_of_vehicles.append(1)
-        
-
+        list_of_number_of_vehicles = [1] * len(vehicles)
 
     cost = Cost(0, 0)
 
