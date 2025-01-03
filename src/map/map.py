@@ -1,10 +1,13 @@
 from _types.map_types import CitiesDict, City, RoutesDict, RouteBetweenCities
+from map.storm import Storm
+from typing import List
 
 
 class Map:
-    def __init__(self, cities, routes):
+    def __init__(self, cities, routes, storms_qnt):
         self.__cities: CitiesDict = cities
         self.__routes: RoutesDict = routes
+        self.storms: List[Storm] = [Storm(self)] * storms_qnt
 
         self.__capitals_ids = [
             city_id for city_id, city in self.__cities.items() if city["capital_info"]

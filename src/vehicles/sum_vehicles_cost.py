@@ -4,6 +4,8 @@ from vehicles.vehicle import Vehicle
 from vehicles.car import Car
 from vehicles.truck import Truck
 
+from map.map import Map
+
 
 class Cost:
     def __init__(self, time: int, cost: int):
@@ -21,7 +23,9 @@ class Cost:
 
 
 def sum_vehicles_cost(
-    vehicles: List[Vehicle], list_of_number_of_vehicles: List[int] = None
+    vehicles: List[Vehicle],
+    list_of_number_of_vehicles: List[int] = None,
+    map: Map = None,
 ) -> Cost:
     """
     Given a List of instance of Vehicle and a corresponding List of the number of vehicles,
@@ -39,12 +43,23 @@ def sum_vehicles_cost(
     last_vehicle = None
     liters_spent_on_last_vehicle = 0
     for vehicle, num_vehicles in zip(vehicles, list_of_number_of_vehicles):
+        vehicle_cost = vehicle.calculate_cost()
+        cost.time += vehicle_cost["time"]
+
+        if map is not None:
+            for storm in map.storms:
+                storm_city_id = storm.get_position(cost.time)
+                if (
+                    storm_city_id == vehicle.starting_node
+                    or storm_city_id == vehicle.ending_node
+                ):
+                    print("\033[90mStorm detected. Penalty added\033[0m")
+                    cost.time += vehicle_cost["time"] * 0.15
+
         for _ in range(num_vehicles):  # Iterate for each vehicle of the same type
             type_vehicle_changed = type(last_vehicle) != type(vehicle)
-            vehicle_cost = vehicle.calculate_cost()
-            cost.time += vehicle_cost["time"]
             cost.monetary_cost += vehicle_cost["fuel_liters"] * vehicle.FUEL_LITER_COST
-            liters_spent_on_last_vehicle += vehicle_cost["fuel_liters"]
+            liters_spent_on_last_vehicle += vehicle_cost["fuel_liters"] / num_vehicles
             if liters_spent_on_last_vehicle > vehicle.TANK_LITERS_CAPACITY:
                 if isinstance(vehicle, (Car, Truck)):
                     cost.time += vehicle.STOP_PENALTY

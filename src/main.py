@@ -8,7 +8,7 @@ print("Loading map data...")
 cities_dict = load(open("src/maps_examples/random_cities.json"))
 routes_dict = load(open("src/maps_examples/random_cities_routes.json"))
 
-map = Map(cities_dict, routes_dict)
+map = Map(cities_dict, routes_dict, storms_qnt=3)
 
 while True:
     interface(map)

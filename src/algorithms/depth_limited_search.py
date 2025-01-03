@@ -34,20 +34,22 @@ def depth_limited_search(map: Map, end_city_id: str, groceries_tons: int):
     if capital_info["cars"] < cars_qnt_needed:
         car_cost = None
     else:
-        car_cost = sum_vehicles_cost(car_route, [cars_qnt_needed] * len(car_route))
+        car_cost = sum_vehicles_cost(
+            car_route, [cars_qnt_needed] * len(car_route), map=map
+        )
 
     if capital_info["trucks"] < trucks_qnt_needed:
         truck_cost = None
     else:
         truck_cost = sum_vehicles_cost(
-            truck_route, [trucks_qnt_needed] * len(truck_route)
+            truck_route, [trucks_qnt_needed] * len(truck_route), map=map
         )
 
     if capital_info["helicopters"] < helicopters_qnt_needed:
         helicopter_cost = None
     else:
         helicopter_cost = sum_vehicles_cost(
-            helicopter_route, [helicopters_qnt_needed] * len(helicopter_route)
+            helicopter_route, [helicopters_qnt_needed] * len(helicopter_route), map=map
         )
 
     print("\nRoute costs for each vehicle: (None is not possible routes)")

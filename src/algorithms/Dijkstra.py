@@ -95,7 +95,7 @@ def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
             elif vehicle_type == "Boat":
                 route.append(Boat(map, parent_id, neighbor_id))
 
-    print("Total cost of the route:", sum_vehicles_cost(route))
+    print("Total cost of the route:", sum_vehicles_cost(route, map=map))
     print("Route:", route)
 
     return route
