@@ -27,8 +27,6 @@ def choose_best_routes_from_multiple_capitals(
         )
         possible_routes += routes
 
-        print(routes)
-
         for route in routes:
             tons_transported += route["tons_transported"]
 
