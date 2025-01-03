@@ -4,6 +4,7 @@ from json import dumps as json_dumps
 
 from map.map import Map
 from map.draw_map import draw_map
+
 from vehicles.car import Car
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 
@@ -11,6 +12,9 @@ from algorithms.DFS import depth_first_search
 from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
 from algorithms.dario import dario
+from algorithms.Dijkstra import dijkstra
+from algorithms.bidirectional_bfs import bidirectional_bfs
+from algorithms.bidirectional_dfs import bidirectional_dfs
 from algorithms.greedy import greedy
 from algorithms.Dijkstra import dijkstra
 
@@ -35,6 +39,7 @@ def interface(map: Map):
     print("9. Algorithm Greedy")
     print("10. Algorithm (à lá Dário)")
     print("11. Algorithm Dijkstra")
+    print("12. Algorithm Bidirectional")
 
     print("\n0. Code Examples")
 
@@ -178,6 +183,41 @@ def interface(map: Map):
         except Exception as e:
             print(f"\nError: {e}")
         press_to_continue()
+    elif option == "12":
+    # Ask for the type of search: BFS or DFS
+        search_type = input("\nChoose search type: 1) BFS or 2) DFS: ")
+
+        if search_type == "1":
+            city_id = input("\nDestination City ID: ")
+            groceries_tons = int(input("\nTons of groceries: "))
+
+            # Call bidirectional BFS
+            path = bidirectional_bfs(map, city_id, groceries_tons)
+            if path:
+                do_you_want_draw_the_path(map, path)  # Draw the path if found
+            else:
+                print("\nNo path found using BFS.")
+        
+        elif search_type == "2":
+            city_id = input("\nDestination City ID: ")
+            groceries_tons = int(input("\nTons of groceries: "))
+
+            # Call bidirectional DFS
+            path = bidirectional_dfs(map, city_id, groceries_tons)
+            if path:
+                do_you_want_draw_the_path(map, path)  # Draw the path if found
+            else:
+                print("\nNo path found using DFS.")
+
+        try:
+            # Handle additional actions or functions if needed (currently commented out)
+            # dario(map, city_id, groceries)
+            pass
+        except Exception as e:
+            print(f"\nError: {e}")
+
+        press_to_continue()
+
 
     elif option == "0":
         print(map.get_city_by_id(0))
