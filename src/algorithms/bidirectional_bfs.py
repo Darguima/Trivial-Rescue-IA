@@ -88,6 +88,7 @@ def bidirectional_bfs(map: Map, end_city_id: str, groceries_tons: int):
 
     return options[best_index][2]
 
+
 def find_bidirectional_path(map: Map, start_city, end_city):
     src_queue = deque([start_city])
     src_visited = {start_city["id"]: None}
@@ -105,7 +106,9 @@ def find_bidirectional_path(map: Map, start_city, end_city):
                     src_visited[neighbor_id] = current_city_id
 
                 if neighbor_id in dest_visited:
-                    return reconstruct_bidirectional_path(src_visited, dest_visited, neighbor_id)
+                    return reconstruct_bidirectional_path(
+                        src_visited, dest_visited, neighbor_id
+                    )
 
         if dest_queue:
             current_city = dest_queue.popleft()
@@ -117,7 +120,9 @@ def find_bidirectional_path(map: Map, start_city, end_city):
                     dest_visited[neighbor_id] = current_city_id
 
                 if neighbor_id in src_visited:
-                    return reconstruct_bidirectional_path(src_visited, dest_visited, neighbor_id)
+                    return reconstruct_bidirectional_path(
+                        src_visited, dest_visited, neighbor_id
+                    )
 
     return None
 
@@ -139,4 +144,3 @@ def reconstruct_bidirectional_path(src_visited, dest_visited, meeting_point):
     print(f"\nPath: {path}")
 
     return path
-

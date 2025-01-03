@@ -8,6 +8,7 @@ from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 
+
 def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     path = find_path(map, end_city_id)
 
@@ -37,9 +38,21 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
         print("\nNot enough vehicles available in the capital.")
         return None
 
-    car_cost = sum_vehicles_cost(car_route) if capital_info["cars"] >= cars_qnt_needed else None
-    truck_cost = sum_vehicles_cost(truck_route) if capital_info["trucks"] >= trucks_qnt_needed else None
-    helicopter_cost = sum_vehicles_cost(helicopter_route) if capital_info["helicopters"] >= helicopters_qnt_needed else None
+    car_cost = (
+        sum_vehicles_cost(car_route)
+        if capital_info["cars"] >= cars_qnt_needed
+        else None
+    )
+    truck_cost = (
+        sum_vehicles_cost(truck_route)
+        if capital_info["trucks"] >= trucks_qnt_needed
+        else None
+    )
+    helicopter_cost = (
+        sum_vehicles_cost(helicopter_route)
+        if capital_info["helicopters"] >= helicopters_qnt_needed
+        else None
+    )
 
     print("\nRoute costs for each vehicle: (None is not possible routes)")
     print("\nCar cost of the path:", car_cost)
@@ -69,6 +82,7 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     print("\t1 vehicle cost:", best_cost[0].get_final_cost())
 
     return options[best_index][2]
+
 
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)

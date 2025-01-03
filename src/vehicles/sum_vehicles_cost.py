@@ -19,7 +19,10 @@ class Cost:
     def __lt__(self, other):
         return self.get_final_cost() < other.get_final_cost()
 
-def sum_vehicles_cost(vehicles: List[Vehicle], list_of_number_of_vehicles: List[int]=None) -> Cost:
+
+def sum_vehicles_cost(
+    vehicles: List[Vehicle], list_of_number_of_vehicles: List[int] = None
+) -> Cost:
     """
     Given a List of instance of Vehicle and a corresponding List of the number of vehicles,
     return the total cost of the route.

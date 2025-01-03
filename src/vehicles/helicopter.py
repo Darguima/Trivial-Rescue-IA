@@ -34,6 +34,6 @@ class Helicopter(Vehicle):
         fuel_liters = self.distance / 100 * self.FUEL_LITERS_PER_100KM
 
         return {"time": time, "fuel_liters": fuel_liters}
-    
+
     def __str__(self):
         return f"Helicopter: {self.starting_node} -> {self.ending_node}"

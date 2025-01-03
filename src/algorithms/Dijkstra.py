@@ -10,6 +10,7 @@ from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 from vehicles.boat import Boat
 
+
 def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
     print("Dijkstra")
     end_city = map.get_city_by_id(end_city_id)
@@ -23,9 +24,9 @@ def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
     )
 
     # Initialize costs with infinity
-    costs = {city["id"]: (float('inf'), None) for city in map.get_all_cities()}
-    costs[start_city["id"]] = (0, start_city["id"])  
-    parents = {start_city["id"]: (None, None, 0)}  
+    costs = {city["id"]: (float("inf"), None) for city in map.get_all_cities()}
+    costs[start_city["id"]] = (0, start_city["id"])
+    parents = {start_city["id"]: (None, None, 0)}
     visited = []
     priority_queue = [(0, start_city["id"])]
 
@@ -51,11 +52,15 @@ def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
 
                 if new_cost < costs[neighbor_id][0]:
                     costs[neighbor_id] = (new_cost, current_city_id)
-                    parents[neighbor_id] = (current_city_id, transport_type, num_vehicles)
+                    parents[neighbor_id] = (
+                        current_city_id,
+                        transport_type,
+                        num_vehicles,
+                    )
                     heapq.heappush(priority_queue, (new_cost, neighbor_id))
 
     if end_city_id not in parents:
-        return None  
+        return None
 
     # Reconstruct the path from start_city to end_city
     path = []
@@ -64,7 +69,9 @@ def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
     while current_city_id is not None:
         parent_city, transport_type, num_vehicles = parents[current_city_id]
         if parent_city is not None:
-            transports.append((parent_city, current_city_id, transport_type, num_vehicles))
+            transports.append(
+                (parent_city, current_city_id, transport_type, num_vehicles)
+            )
         path.append(current_city_id)
         current_city_id = parent_city
 
@@ -78,7 +85,7 @@ def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
     route = []
     for transport in transports:
         parent_id, neighbor_id, vehicle_type, num_vehicles = transport
-        for _ in range(num_vehicles): 
+        for _ in range(num_vehicles):
             if vehicle_type == "Car":
                 route.append(Car(map, parent_id, neighbor_id))
             elif vehicle_type == "Truck":
@@ -93,20 +100,21 @@ def dijkstra(map: Map, end_city_id: str, groceries_tons: int):
 
     return route
 
+
 def calculate_travel_cost(map: Map, current_city, neighbor, groceries_tons, weather):
-    vehicle_classes = {
-        "air": [Helicopter],
-        "land": [Car, Truck],
-        "water": [Boat]
-    }
+    vehicle_classes = {"air": [Helicopter], "land": [Car, Truck], "water": [Boat]}
 
     # Get the list of vehicles applicable for the given weather
     applicable_vehicles = vehicle_classes.get(weather, [])
     if not applicable_vehicles:
-        return float('inf'), None, 0  # Invalid weather type, return infinity cost, no vehicle, and zero vehicles
+        return (
+            float("inf"),
+            None,
+            0,
+        )  # Invalid weather type, return infinity cost, no vehicle, and zero vehicles
 
     # Initialize the minimum cost and corresponding vehicle
-    min_cost = float('inf')
+    min_cost = float("inf")
     best_vehicle_type = None
     number_of_vehicles_needed = 0
 
@@ -123,8 +131,7 @@ def calculate_travel_cost(map: Map, current_city, neighbor, groceries_tons, weat
         # Update the minimum cost if this option is cheaper
         if total_cost < min_cost:
             min_cost = total_cost
-            best_vehicle_type = vehicle_class.__name__  
+            best_vehicle_type = vehicle_class.__name__
             number_of_vehicles_needed = num_vehicles
 
     return min_cost, best_vehicle_type, number_of_vehicles_needed
-

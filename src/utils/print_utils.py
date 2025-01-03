@@ -1,6 +1,7 @@
 from json import dumps as json_dumps
 import shutil
 
+
 def print_centered(text="", break_line_before=False):
     """Imprime texto centrado no terminal."""
     columns, _ = shutil.get_terminal_size()

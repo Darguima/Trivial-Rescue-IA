@@ -17,16 +17,33 @@ from algorithms.bidirectional_dfs import bidirectional_dfs
 from algorithms.depth_limited_search import depth_limited_search
 from algorithms.iddfs import iddfs
 
+
 def interface(map: Map):
     clear()
-    print_centered("===================================================================")
-    print_centered("|  _____     _       _       _   ____                             |")
-    print_centered("| |_   _| __(_)_   _(_) __ _| | |  _ \\ ___  ___  ___ _   _  ___   |")
-    print_centered("|   | || '__| \\ \\ / / |/ _` | | | |_) / _ \\/ __|/ __| | | |/ _ \\  |")
-    print_centered("|   | || |  | |\\ V /| | (_| | | |  _ <  __/\\__ \\ (__| |_| |  __/  |")
-    print_centered("|   |_||_|  |_| \\_/ |_|\\__,_|_| |_| \\_\\___||___/\\___|\\__,_|\\___|  |")
-    print_centered("|                                                                 |")
-    print_centered("===================================================================\n")
+    print_centered(
+        "==================================================================="
+    )
+    print_centered(
+        "|  _____     _       _       _   ____                             |"
+    )
+    print_centered(
+        "| |_   _| __(_)_   _(_) __ _| | |  _ \\ ___  ___  ___ _   _  ___   |"
+    )
+    print_centered(
+        "|   | || '__| \\ \\ / / |/ _` | | | |_) / _ \\/ __|/ __| | | |/ _ \\  |"
+    )
+    print_centered(
+        "|   | || |  | |\\ V /| | (_| | | |  _ <  __/\\__ \\ (__| |_| |  __/  |"
+    )
+    print_centered(
+        "|   |_||_|  |_| \\_/ |_|\\__,_|_| |_| \\_\\___||___/\\___|\\__,_|\\___|  |"
+    )
+    print_centered(
+        "|                                                                 |"
+    )
+    print_centered(
+        "===================================================================\n"
+    )
 
     print_centered("Select an option:\n")
 
@@ -38,7 +55,7 @@ def interface(map: Map):
     print_centered("5. Get Info about city", break_line_before=True)
     print_centered("6. Get capitals cities")
     print_centered("7. Get Info about route")
-    
+
     print_centered("8. Algorithm Depth First Search", break_line_before=True)
     print_centered("9. Algorithm Breadth First Search")
     print_centered("10. Algorithm A*")
@@ -54,7 +71,9 @@ def interface(map: Map):
     clear()
 
     print_centered(f"Option: {option}")
-    print_centered("===================================================================")
+    print_centered(
+        "==================================================================="
+    )
 
     if option == "1":
         job_for_another_core = multiprocessing.Process(
@@ -67,7 +86,7 @@ def interface(map: Map):
             target=draw_map, args=(map, "real", "land")
         )
         job_for_another_core.start()
-    
+
     if option == "3":
         job_for_another_core = multiprocessing.Process(
             target=draw_map, args=(map, "matrix", "sea")
@@ -119,7 +138,7 @@ def interface(map: Map):
     elif option in {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17"}:
         city_id = input_centered("Destination City ID: ")
         groceries_tons = int(input_centered("Tons of grocery: "))
-        
+
         try:
             algorithms = {
                 "8": depth_first_search,
@@ -141,6 +160,7 @@ def interface(map: Map):
             print_centered(f"Error: {e}")
 
         press_to_continue()
+
 
 def clear():
     if "TERM" not in environ:

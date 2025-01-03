@@ -39,7 +39,6 @@ def bidirectional_dfs(map: Map, end_city_id: str, groceries_tons: int):
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
 
-
     if capital_info["cars"] < cars_qnt_needed:
         car_cost = None
     else:
@@ -71,7 +70,6 @@ def bidirectional_dfs(map: Map, end_city_id: str, groceries_tons: int):
         print("\nNo valid routes available with the required vehicles.")
         return None
 
-
     best_index, best_cost = min(
         enumerate(options),
         key=lambda option: option[1][0].get_final_cost() * option[1][1],
@@ -99,13 +97,14 @@ def find_bidirectional_path(map: Map, start_city, end_city):
             current_city_id = current_city["id"]
 
             if current_city_id in dest_visited:
-                return reconstruct_bidirectional_path(src_visited, dest_visited, current_city_id)
+                return reconstruct_bidirectional_path(
+                    src_visited, dest_visited, current_city_id
+                )
 
             for neighbor_id in current_city["neighbors"]["land"]:
                 if neighbor_id not in src_visited:
                     src_stack.append(map.get_city_by_id(neighbor_id))
                     src_visited[neighbor_id] = current_city_id
-
 
         if dest_stack:
             current_city = dest_stack.pop()
@@ -113,7 +112,9 @@ def find_bidirectional_path(map: Map, start_city, end_city):
 
             if current_city_id in src_visited:
 
-                return reconstruct_bidirectional_path(src_visited, dest_visited, current_city_id)
+                return reconstruct_bidirectional_path(
+                    src_visited, dest_visited, current_city_id
+                )
 
             for neighbor_id in current_city["neighbors"]["land"]:
                 if neighbor_id not in dest_visited:
@@ -121,6 +122,7 @@ def find_bidirectional_path(map: Map, start_city, end_city):
                     dest_visited[neighbor_id] = current_city_id
 
     return None
+
 
 def reconstruct_bidirectional_path(src_visited, dest_visited, meeting_point):
     path = []

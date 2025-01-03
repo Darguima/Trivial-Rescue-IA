@@ -7,6 +7,7 @@ from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 
+
 def A_star(map: Map, end_city_id: str, groceries_tons: int):
     capitals = map.get_capitals()
     start_city = min(
@@ -23,7 +24,9 @@ def A_star(map: Map, end_city_id: str, groceries_tons: int):
     cars_qnt_needed = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
     if car_route and capital_info["cars"] >= cars_qnt_needed:
         car_route = create_route(map, car_route, Car)
-        car_cost = sum_vehicles_cost(car_route, [cars_qnt_needed] * len(car_route)).get_final_cost()
+        car_cost = sum_vehicles_cost(
+            car_route, [cars_qnt_needed] * len(car_route)
+        ).get_final_cost()
     else:
         car_cost = None
 
@@ -32,7 +35,9 @@ def A_star(map: Map, end_city_id: str, groceries_tons: int):
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
     if truck_route and capital_info["trucks"] >= trucks_qnt_needed:
         truck_route = create_route(map, truck_route, Truck)
-        truck_cost = sum_vehicles_cost(truck_route, [trucks_qnt_needed] * len(truck_route)).get_final_cost()
+        truck_cost = sum_vehicles_cost(
+            truck_route, [trucks_qnt_needed] * len(truck_route)
+        ).get_final_cost()
     else:
         truck_cost = None
 
@@ -41,7 +46,9 @@ def A_star(map: Map, end_city_id: str, groceries_tons: int):
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
     if helicopter_route and capital_info["helicopters"] >= helicopters_qnt_needed:
         helicopter_route = create_route(map, helicopter_route, Helicopter)
-        helicopter_cost = sum_vehicles_cost(helicopter_route, [helicopters_qnt_needed] * len(helicopter_route)).get_final_cost()
+        helicopter_cost = sum_vehicles_cost(
+            helicopter_route, [helicopters_qnt_needed] * len(helicopter_route)
+        ).get_final_cost()
     else:
         helicopter_cost = None
 
@@ -73,6 +80,7 @@ def A_star(map: Map, end_city_id: str, groceries_tons: int):
     print("\tvehicles needed:", best_cost[1])
 
     return options[best_index][2]
+
 
 def find_path(map: Map, end_city_id: str, vehicle_type: str):
     end_city = map.get_city_by_id(end_city_id)
@@ -124,7 +132,10 @@ def find_path(map: Map, end_city_id: str, vehicle_type: str):
                 )
                 tentative_g_cost = g_costs[current_city_id] + travel_cost
 
-                if neighbor_id not in g_costs or tentative_g_cost < g_costs[neighbor_id]:
+                if (
+                    neighbor_id not in g_costs
+                    or tentative_g_cost < g_costs[neighbor_id]
+                ):
                     g_costs[neighbor_id] = tentative_g_cost
                     heuristic = distance_between_coords(
                         neighbor["map_coords"], end_city["map_coords"]
@@ -134,6 +145,7 @@ def find_path(map: Map, end_city_id: str, vehicle_type: str):
                     parent[neighbor_id] = current_city_id
 
     return None  # Return None if no path is found
+
 
 def create_route(map: Map, path: list, VehicleClass):
     route = []

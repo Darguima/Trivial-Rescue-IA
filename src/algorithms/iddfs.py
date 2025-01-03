@@ -8,6 +8,7 @@ from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 
+
 def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     path = find_path(map, end_city_id)
 
@@ -36,12 +37,16 @@ def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     if capital_info["trucks"] < trucks_qnt_needed:
         truck_cost = None
     else:
-        truck_cost = sum_vehicles_cost(truck_route, [trucks_qnt_needed] * len(truck_route))
+        truck_cost = sum_vehicles_cost(
+            truck_route, [trucks_qnt_needed] * len(truck_route)
+        )
 
     if capital_info["helicopters"] < helicopters_qnt_needed:
         helicopter_cost = None
     else:
-        helicopter_cost = sum_vehicles_cost(helicopter_route, [helicopters_qnt_needed] * len(helicopter_route))
+        helicopter_cost = sum_vehicles_cost(
+            helicopter_route, [helicopters_qnt_needed] * len(helicopter_route)
+        )
 
     print("\nRoute costs for each vehicle: (None is not possible routes)")
     print("\nCar cost of the path:", car_cost)
@@ -68,6 +73,7 @@ def iddfs(map: Map, end_city_id: str, groceries_tons: int):
 
     return options[best_index][2]
 
+
 def find_path(map: Map, end_city_id: str):
     end_city = map.get_city_by_id(end_city_id)
 
@@ -86,6 +92,7 @@ def find_path(map: Map, end_city_id: str):
         if result is not None:
             return result
         depth += 1
+
 
 def dls(map: Map, current_city_id: str, end_city_id: str, depth: int):
     if depth == 0:
@@ -119,4 +126,3 @@ def dls(map: Map, current_city_id: str, end_city_id: str, depth: int):
                     parent[neighbor_id] = current_city_id
 
     return None
-
