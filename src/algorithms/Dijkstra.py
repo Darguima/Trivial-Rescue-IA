@@ -112,15 +112,13 @@ def calculate_travel_cost(map: Map, current_city, neighbor, groceries_tons, weat
 
     for vehicle_class in applicable_vehicles:
         vehicle = vehicle_class(map, current_city["id"], neighbor["id"])
-        vehicle_cost = vehicle.calculate_cost()
 
         # Calculate the number of vehicles required
 
         num_vehicles = math.ceil(groceries_tons / vehicle.MAX_CAPACITY_TONS)
 
         # Calculate total cost for this option
-        total_cost = num_vehicles * (vehicle_cost["time"] * 0.8 +
-                                     vehicle_cost["fuel_liters"] * vehicle.FUEL_LITER_COST * 0.2)
+        total_cost = sum_vehicles_cost([vehicle]).get_final_cost()
 
         # Update the minimum cost if this option is cheaper
         if total_cost < min_cost:
