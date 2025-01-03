@@ -3,12 +3,15 @@ import math
 from map.map import Map
 from utils.distance_between_coords import distance_between_coords
 
+from utils.print_utils import input_centered
+
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 
-def depth_limited_search(map: Map, end_city_id: str, groceries_tons: int, limit: int):
+def depth_limited_search(map: Map, end_city_id: str, groceries_tons: int):
+    limit = int(input_centered("Limit: "))
     path = find_path(map, end_city_id, limit)
 
     if path is None:
