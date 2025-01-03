@@ -1,97 +1,44 @@
 import heapq
-import math
 from map.map import Map
 from utils.distance_between_coords import distance_between_coords
-from vehicles.car import Car
-from vehicles.truck import Truck
-from vehicles.helicopter import Helicopter
-from vehicles.sum_vehicles_cost import sum_vehicles_cost
+
+from typing import Literal
+
+from utils.choose_best_routes_from_multiple_capitals import (
+    choose_best_routes_from_multiple_capitals,
+)
 
 
 def A_star(map: Map, end_city_id: str, groceries_tons: int):
-    capitals = map.get_capitals()
-    start_city = min(
-        capitals,
-        key=lambda capital: distance_between_coords(
-            capital["map_coords"], map.get_city_by_id(end_city_id)["map_coords"]
-        ),
-    )
-    capital_id = start_city["id"]
-    capital_info = map.get_city_by_id(capital_id)["capital_info"]
-
-    # Try to find a path using cars
-    car_route = find_path(map, end_city_id, vehicle_type="car")
-    cars_qnt_needed = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
-    if car_route and capital_info["cars"] >= cars_qnt_needed:
-        car_route = create_route(map, car_route, Car)
-        car_cost = sum_vehicles_cost(
-            car_route, [cars_qnt_needed] * len(car_route)
-        ).get_final_cost()
-    else:
-        car_cost = None
-
-    # Try to find a path using trucks
-    truck_route = find_path(map, end_city_id, vehicle_type="truck")
-    trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
-    if truck_route and capital_info["trucks"] >= trucks_qnt_needed:
-        truck_route = create_route(map, truck_route, Truck)
-        truck_cost = sum_vehicles_cost(
-            truck_route, [trucks_qnt_needed] * len(truck_route)
-        ).get_final_cost()
-    else:
-        truck_cost = None
-
-    # Try to find a path using helicopters
-    helicopter_route = find_path(map, end_city_id, vehicle_type="helicopter")
-    helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
-    if helicopter_route and capital_info["helicopters"] >= helicopters_qnt_needed:
-        helicopter_route = create_route(map, helicopter_route, Helicopter)
-        helicopter_cost = sum_vehicles_cost(
-            helicopter_route, [helicopters_qnt_needed] * len(helicopter_route)
-        ).get_final_cost()
-    else:
-        helicopter_cost = None
-
-    # Print route and cost details
-    print("\nRoute costs for each vehicle: (None is not possible routes)")
-    print("\nCar cost of the path:", car_cost)
-    print("Truck cost of the path:", truck_cost)
-    print("Helicopter cost of the path:", helicopter_cost)
-
-    options = [
-        (car_cost, cars_qnt_needed, car_route),
-        (truck_cost, trucks_qnt_needed, truck_route),
-        (helicopter_cost, helicopters_qnt_needed, helicopter_route),
-    ]
-    options = [option for option in options if option[0] is not None]
-
-    if not options:
-        print("\nNo valid routes available.")
-        return None
-
-    best_index, best_cost = min(
-        enumerate(options),
-        key=lambda option: option[0],
-    )
-
-    print(f"\nBest route:")
-    print("\tindex:", best_index)
-    print("\tfinal cost:", best_cost[0])
-    print("\tvehicles needed:", best_cost[1])
-
-    return options[best_index][2]
-
-
-def find_path(map: Map, end_city_id: str, vehicle_type: str):
+    end_city_id = str(end_city_id)
     end_city = map.get_city_by_id(end_city_id)
 
     capitals = map.get_capitals()
-    start_city = min(
+    nearest_capitals = sorted(
         capitals,
         key=lambda capital: distance_between_coords(
             capital["map_coords"], end_city["map_coords"]
         ),
     )
+
+    multiple_routes = choose_best_routes_from_multiple_capitals(
+        map, nearest_capitals, end_city_id, groceries_tons, find_path
+    )
+
+    flattened_routes = [
+        vehicle for route_info in multiple_routes for vehicle in route_info["route"]
+    ]
+    return flattened_routes
+
+
+def find_path(
+    map: Map,
+    start_city_id: str,
+    end_city_id: str,
+    route_type: Literal["land", "air", "sea"] = "land",
+):
+    start_city = map.get_city_by_id(start_city_id)
+    end_city = map.get_city_by_id(end_city_id)
 
     open_list = []
     heapq.heappush(open_list, (0, start_city["id"]))
@@ -115,11 +62,11 @@ def find_path(map: Map, end_city_id: str, vehicle_type: str):
         closed_list.add(current_city_id)
 
         for weather, neighbor_ids in current_city["neighbors"].items():
-            if vehicle_type == "car" and weather != "land":
+            if route_type == "land" and weather != "land":
                 continue
-            if vehicle_type == "truck" and weather != "land":
+            if route_type == "air" and weather != "air":
                 continue
-            if vehicle_type == "helicopter" and weather != "air":
+            if route_type == "sea" and weather != "sea":
                 continue
 
             for neighbor_id in neighbor_ids:

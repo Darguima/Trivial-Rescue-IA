@@ -12,3 +12,6 @@ class Vehicle(ABC):
     @abstractmethod
     def calculate_cost(self):
         pass
+
+    def __str__(self):
+        return f"Generic Vehicle: {self.starting_node} -> {self.ending_node}"

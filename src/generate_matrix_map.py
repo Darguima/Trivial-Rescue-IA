@@ -13,7 +13,10 @@ SPACE_SIZE = (
 MAP_VOID_PROBABILITY = 10  # what % of spaces will be empty
 NOT_ROAD_PROBABILITY = 15  # what % of roads will not be created
 NOT_HARBOR_PROBABILITY = 15  # what % of cities will not have a harbor
-CAPITALS_PERCENTAGE = 2  # what % of the cities will be capitals
+NOT_HARBOR_CONNECTION_PROBABILITY = (
+    75  # what % of harbor connections will not be created
+)
+CAPITALS_PERCENTAGE = 5  # what % of the cities will be capitals
 CAPITALS_QNT = math.ceil(MATRIX_WIDTH**2 * CAPITALS_PERCENTAGE / 100)
 
 
@@ -85,6 +88,7 @@ for space_i in range(MATRIX_WIDTH**2):
         "id": id,
         "name": f"City {id}",
         "capital_info": None,
+        "harbor_info": None,
         "matrix_coords": matrix_coords,
         "map_coords": map_coords,
         "population": population,
@@ -185,11 +189,19 @@ harbor_cities = [
     harbor for harbor in coastal_cities if randint(0, 100) > NOT_HARBOR_PROBABILITY
 ]
 
+for harbor_id in harbor_cities:
+    cities[harbor_id]["harbor_info"] = {
+        "boats": randint(1, 2),
+    }
+
 for i in range(len(harbor_cities)):
-    source_id = coastal_cities[i]
+    source_id = harbor_cities[i]
     routes[source_id]["sea"] = {}
     for j in range(i + 1, len(harbor_cities)):
-        destination_id = coastal_cities[j]
+        if randint(0, 100) < NOT_HARBOR_CONNECTION_PROBABILITY:
+            continue
+
+        destination_id = harbor_cities[j]
         distance = distance_between_coords(
             cities[source_id]["map_coords"], cities[destination_id]["map_coords"]
         )

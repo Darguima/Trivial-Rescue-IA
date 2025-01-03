@@ -10,7 +10,6 @@ from algorithms.DFS import depth_first_search
 from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
 from algorithms.greedy import greedy
-from algorithms.dario import dario
 from algorithms.Dijkstra import dijkstra
 from algorithms.bidirectional_bfs import bidirectional_bfs
 from algorithms.bidirectional_dfs import bidirectional_dfs
@@ -59,13 +58,12 @@ def interface(map: Map):
     print_centered("8. Algorithm Depth First Search", break_line_before=True)
     print_centered("9. Algorithm Breadth First Search")
     print_centered("10. Algorithm A*")
-    print_centered("11. Algorithm Greedy")
-    print_centered("12. Algorithm (à lá Dário)")
-    print_centered("13. Algorithm Dijkstra")
+    print_centered("11. Algorithm Greedy (without multiple capitals)")
+    print_centered("12. Algorithm IDDFS")
+    print_centered("13. Algorithm Dijkstra (without multiple capitals)")
     print_centered("14. Algorithm Bidirectional DFS")
     print_centered("15. Algorithm Bidirectional BFS")
-    print_centered("16. Algorithm Depth Limited Search")
-    print_centered("17. Algorithm IDDFS")
+    print_centered("16. Algorithm Depth Limited Search (with multiple capitals)")
 
     option = input_centered("Option: ", break_line_before=True)
     clear()
@@ -100,7 +98,7 @@ def interface(map: Map):
         job_for_another_core.start()
 
     elif option == "5":
-        city_id = input_centered("\nCity ID: ")
+        city_id = input_centered("City ID: ")
 
         try:
             city = map.get_city_by_id(city_id)
@@ -123,7 +121,7 @@ def interface(map: Map):
         press_to_continue()
 
     elif option == "7":
-        city_id_1 = input_centered("\nCity ID 1: ")
+        city_id_1 = input_centered("City ID 1: ")
         city_id_2 = input_centered("City ID 2: ")
 
         try:
@@ -135,26 +133,27 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option in {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17"}:
+    elif option in {"8", "9", "10", "11", "12", "13", "14", "15", "16"}:
         city_id = input_centered("Destination City ID: ")
         groceries_tons = int(input_centered("Tons of grocery: "))
 
-        try:
-            algorithms = {
-                "8": depth_first_search,
-                "9": breadth_first_search,
-                "10": A_star,
-                "11": greedy,
-                "12": dario,
-                "13": dijkstra,
-                "14": bidirectional_dfs,
-                "15": bidirectional_bfs,
-                "16": depth_limited_search,
-                "17": iddfs,
-            }
+        # try:
+        algorithms = {
+            "8": depth_first_search,
+            "9": breadth_first_search,
+            "10": A_star,
+            "11": greedy,
+            "12": iddfs,
+            "13": dijkstra,
+            "14": bidirectional_dfs,
+            "15": bidirectional_bfs,
+            "16": depth_limited_search,
+        }
 
-            path = algorithms[option](map, city_id, groceries_tons)
-            do_you_want_draw_the_path(map, path)
+        path = algorithms[option](map, city_id, groceries_tons)
+        do_you_want_draw_the_path(map, path)
+        try:
+            ...
 
         except Exception as e:
             print_centered(f"Error: {e}")
