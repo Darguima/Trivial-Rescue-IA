@@ -63,7 +63,7 @@ def interface(map: Map):
     print_centered("13. Algorithm Dijkstra (without multiple capitals)")
     print_centered("14. Algorithm Bidirectional DFS")
     print_centered("15. Algorithm Bidirectional BFS")
-    print_centered("16. Algorithm Depth Limited Search")
+    print_centered("16. Algorithm Depth Limited Search (with multiple capitals)")
 
     option = input_centered("Option: ", break_line_before=True)
     clear()

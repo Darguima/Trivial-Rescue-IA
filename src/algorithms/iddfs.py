@@ -1,19 +1,15 @@
 import math
-
 from map.map import Map
 from utils.distance_between_coords import distance_between_coords
-
 from typing import Literal
-
 from utils.choose_best_routes_from_multiple_capitals import (
     choose_best_routes_from_multiple_capitals,
 )
 
 
-def iddfs(map: Map, end_city_id: str, groceries_tons: int):
+def iddfs(map: Map, end_city_id: str, groceries_tons: int, max_depth: int = 1000):
     end_city_id = str(end_city_id)
     end_city = map.get_city_by_id(end_city_id)
-
     capitals = map.get_capitals()
     nearest_capitals = sorted(
         capitals,
@@ -23,7 +19,13 @@ def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     )
 
     multiple_routes = choose_best_routes_from_multiple_capitals(
-        map, nearest_capitals, end_city_id, groceries_tons, find_path
+        map,
+        nearest_capitals,
+        end_city_id,
+        groceries_tons,
+        lambda m, start_id, end_id, route_type: find_path_with_iddfs(
+            m, start_id, end_id, route_type, max_depth
+        ),
     )
 
     flattened_routes = [
@@ -32,37 +34,34 @@ def iddfs(map: Map, end_city_id: str, groceries_tons: int):
     return flattened_routes
 
 
-def find_path(
+def find_path_with_iddfs(
     map: Map,
     start_city_id: str,
     end_city_id: str,
     route_type: Literal["land", "air", "sea"] = "land",
+    max_depth: int = 1000,
 ):
-    start_city = map.get_city_by_id(start_city_id)
-
-    depth = 0
-    while True:
-        result = dls(map, start_city["id"], end_city_id, depth, route_type)
+    for depth in range(max_depth + 1):
+        result = dls(map, start_city_id, end_city_id, route_type, depth)
         if result is not None:
             return result
-        depth += 1
+    print(f"No path found within the max depth of {max_depth}.")
+    return None
 
 
 def dls(
     map: Map,
     current_city_id: str,
     end_city_id: str,
-    depth: int,
     route_type: Literal["land", "air", "sea"] = "land",
+    depth: int = 1000,
 ):
-    if depth == 0:
-        return None
-    stack = [(current_city_id, 0)]
+    stack = [current_city_id]
     visited = set()
     parent = {current_city_id: None}
 
     while stack:
-        current_city_id, current_depth = stack.pop()
+        current_city_id = stack.pop()
 
         if current_city_id in visited:
             continue
@@ -70,7 +69,7 @@ def dls(
         visited.add(current_city_id)
 
         if current_city_id == end_city_id:
-            # Reconstruct the path from start_city to end_city
+
             path = []
             while current_city_id is not None:
                 path.append(current_city_id)
@@ -78,11 +77,12 @@ def dls(
             path.reverse()
             return path
 
-        if current_depth < depth:
-            current_city = map.get_city_by_id(current_city_id)
+        current_city = map.get_city_by_id(current_city_id)
+
+        if depth > 0:
             for neighbor_id in current_city["neighbors"][route_type]:
                 if neighbor_id not in visited:
-                    stack.append((neighbor_id, current_depth + 1))
+                    stack.append(neighbor_id)
                     parent[neighbor_id] = current_city_id
 
     return None
