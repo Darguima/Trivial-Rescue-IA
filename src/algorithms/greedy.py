@@ -29,9 +29,6 @@ def greedy(map: Map, end_city_id: str, groceries_tons: int):
         next_city_id = path[i + 1]
 
         current_city = map.get_city_by_id(current_city_id)
-        distance = distance_between_coords(
-            current_city["map_coords"], map.get_city_by_id(next_city_id)["map_coords"]
-        )
 
         # Route 1: Prefer Cars, fallback to Helicopter or Boat
         for weather, neighbor_cities in current_city["neighbors"].items():
@@ -87,8 +84,8 @@ def greedy(map: Map, end_city_id: str, groceries_tons: int):
                     break
 
     # Calculate costs for both routes
-    route1_cost = sum_vehicles_cost(route1, num_vehicles_route1)
-    route2_cost = sum_vehicles_cost(route2, num_vehicles_route2)
+    route1_cost = sum_vehicles_cost(route1, num_vehicles_route1, map=map)
+    route2_cost = sum_vehicles_cost(route2, num_vehicles_route2, map=map)
 
     route1_cost = route1_cost.get_final_cost()
     route2_cost = route2_cost.get_final_cost()

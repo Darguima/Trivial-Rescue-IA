@@ -135,7 +135,7 @@ def interface(map: Map):
 
     elif option in {"8", "9", "10", "11", "12", "13", "14", "15", "16"}:
         city_id = input_centered("Destination City ID: ")
-        groceries_tons = int(input_centered("Tons of grocery: "))
+        groceries_tons = float(input_centered("Tons of grocery: "))
 
         # try:
         algorithms = {

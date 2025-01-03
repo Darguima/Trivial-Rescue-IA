@@ -52,7 +52,7 @@ def create_mono_vehicle_routes(
             Car(map, land_path[i], land_path[i + 1]) for i in range(len(land_path) - 1)
         ]
         route_cost = sum_vehicles_cost(
-            route, [vehicles_used] * len(route)
+            route, [vehicles_used] * len(route), map=map
         ).get_final_cost()
         max_tons_transported = vehicles_used * Car.MAX_CAPACITY_TONS
 
@@ -76,7 +76,7 @@ def create_mono_vehicle_routes(
             for i in range(len(land_path) - 1)
         ]
         route_cost = sum_vehicles_cost(
-            route, [vehicles_used] * len(route)
+            route, [vehicles_used] * len(route), map=map
         ).get_final_cost()
 
         routes.append(
@@ -97,7 +97,7 @@ def create_mono_vehicle_routes(
 
     if air_path and vehicles_used > 0:
         route = [Helicopter(map, air_path[0], air_path[-1])]
-        route_cost = sum_vehicles_cost(route, [vehicles_used]).get_final_cost()
+        route_cost = sum_vehicles_cost(route, [vehicles_used], map=map).get_final_cost()
 
         routes.append(
             {
@@ -122,7 +122,7 @@ def create_mono_vehicle_routes(
             Boat(map, sea_path[i], sea_path[i + 1]) for i in range(len(sea_path) - 1)
         ]
         route_cost = sum_vehicles_cost(
-            route, [vehicles_used] * len(route)
+            route, [vehicles_used] * len(route), map=map
         ).get_final_cost()
 
         routes.append(
