@@ -10,6 +10,7 @@ from vehicles.sum_vehicles_cost import Cost
 def draw_map(
     map: Map,
     map_type: Literal["matrix", "real"] = "matrix",
+    route_type: Literal["land", "air", "sea"] = "land",
     path: Optional[Cost] = None,
 ):
     G = nx.Graph()
@@ -21,9 +22,9 @@ def draw_map(
         x, y = city[draw_type]
         G.add_node(city_id, pos=(x, y), place_data=city, name=city["name"])
 
-        for neighbor_id in city["neighbors"]["land"]:
-            road = map.get_routes_between_cities(city_id, neighbor_id)["land"]
-            G.add_edge(city_id, neighbor_id, route_data=road)
+        for neighbor_id in city["neighbors"][route_type]:
+            route = map.get_routes_between_cities(city_id, neighbor_id)[route_type]
+            G.add_edge(city_id, neighbor_id, route_data=route)
 
     pos = nx.get_node_attributes(G, "pos")
 
@@ -36,9 +37,12 @@ def draw_map(
     ]
 
     speed_colors = {50: "g", 90: "y", 100: "m", 120: "r"}
-    route_colors = [
-        speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges
-    ]  # Adjust size by population
+    if route_type == "land":
+        route_colors = [
+            speed_colors[G.edges[edge]["route_data"]["max_speed"]] for edge in G.edges
+        ]  # Adjust size by population
+    else:
+        route_colors = "k"
 
     # Highlight path edges with different colors for different vehicles
     if path:
@@ -58,33 +62,56 @@ def draw_map(
     nx.draw_networkx_labels(G, pos, labels, font_size=12)
 
     # Create legend for edges
+    handles = [
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color="w",
+            markerfacecolor="r",
+            markersize=10,
+            alpha=0.6,
+            label="Capital",
+        ),
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color="w",
+            markerfacecolor="b",
+            markersize=10,
+            alpha=0.6,
+            label="Non-Capital",
+        ),
+        Line2D([0], [0], color="g", lw=3, alpha=0.5, label="50 km/h"),
+        Line2D([0], [0], color="y", lw=3, alpha=0.5, label="90 km/h"),
+        Line2D([0], [0], color="m", lw=3, alpha=0.5, label="100 km/h"),
+        Line2D([0], [0], color="r", lw=3, alpha=0.5, label="120 km/h"),
+    ]
+
+    if path:
+        already_added = set()
+
+        for vehicle_route in path:
+            if vehicle_route.__class__.__name__ in already_added:   
+                continue
+
+            already_added.add(vehicle_route.__class__.__name__)
+
+            vehicle_color = vehicle_route.COLOR
+            handles.append(
+                Line2D(
+                    [0],
+                    [0],
+                    color=vehicle_color,
+                    lw=5,
+                    alpha=1,
+                    label=vehicle_route.__class__.__name__,
+                )
+            )
+
     plt.legend(
-        handles=[
-            Line2D(
-                [0],
-                [0],
-                marker="o",
-                color="w",
-                markerfacecolor="r",
-                markersize=10,
-                alpha=0.6,
-                label="Capital",
-            ),
-            Line2D(
-                [0],
-                [0],
-                marker="o",
-                color="w",
-                markerfacecolor="b",
-                markersize=10,
-                alpha=0.6,
-                label="Non-Capital",
-            ),
-            Line2D([0], [0], color="g", lw=3, alpha=0.5, label="50 km/h"),
-            Line2D([0], [0], color="y", lw=3, alpha=0.5, label="90 km/h"),
-            Line2D([0], [0], color="m", lw=3, alpha=0.5, label="100 km/h"),
-            Line2D([0], [0], color="r", lw=3, alpha=0.5, label="120 km/h"),
-        ],
+        handles=handles,
         title="Legend",
         bbox_to_anchor=(0.05, 0.3),  # Fine-tune the legend position (x, y)
         borderaxespad=0.0,  # Padding between the legend and the plot
