@@ -37,19 +37,13 @@ def greedy(map: Map, end_city_id: str, groceries_tons: int):
         for weather, neighbor_cities in current_city["neighbors"].items():
             if next_city_id in neighbor_cities:
                 if weather == "land":
+                    
+
                     num_vehicles = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
                     num_vehicles_route1.append(num_vehicles)
-                    
-                    # Fuel logic for cars
-                    fuel_used = distance * (Car.FUEL_LITERS_PER_100KM / 100)
-                    fuel_cost = fuel_used * Car.FUEL_LITER_COST
-                    refills = max(0, math.ceil(fuel_used / Car.TANK_LITERS_CAPACITY) - 1)
-                    refill_penalty = refills * Car.FILL_TANK_PENALTY
-                    
-                    # Add car to route1
+
                     car = Car(map, current_city_id, next_city_id)
-                    car.fuel_cost = fuel_cost
-                    car.refill_penalty = refill_penalty
+
                     route1.append(car)
                     break
 
@@ -72,16 +66,8 @@ def greedy(map: Map, end_city_id: str, groceries_tons: int):
                     num_vehicles = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
                     num_vehicles_route2.append(num_vehicles)
 
-                    # Fuel logic for trucks
-                    fuel_used = distance * (Truck.FUEL_LITERS_PER_100KM / 100)
-                    fuel_cost = fuel_used * Truck.FUEL_LITER_COST
-                    refills = max(0, math.ceil(fuel_used / Truck.TANK_LITERS_CAPACITY) - 1)
-                    refill_penalty = refills * Truck.FILL_TANK_PENALTY
-
-                    # Add truck to route2
                     truck = Truck(map, current_city_id, next_city_id)
-                    truck.fuel_cost = fuel_cost
-                    truck.refill_penalty = refill_penalty
+
                     route2.append(truck)
                     break
 
@@ -154,9 +140,6 @@ def find_path(map: Map, end_city_id: str):
 
         visited.add(current_city["id"])
         open_list.discard(current_city["id"])
-        print("openlist",open_list)
-        print("visited",visited)
-
 
     return None  # Return None if no path is found
 
@@ -183,5 +166,5 @@ def min_heuristic(map: Map, city, end_city, visited, avoid_air_routes=False):
         return None  # No valid neighbors
 
     heuristic_list.sort(key=lambda x: (x[0], x[2] == "air"))  # Sort by heuristic, prioritizing non-air routes
-    print("heuristic_list",heuristic_list)
+
     return heuristic_list[0][1]  # Return the city with the minimum heuristic
