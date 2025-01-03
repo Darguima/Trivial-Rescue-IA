@@ -22,17 +22,20 @@ def interface(map: Map):
 
     print("Select an option:\n")
 
-    print("1. Draw matrix map")
-    print("2. Draw real map")
-    print("3. Get Info about city")
-    print("4. Get capitals cities")
-    print("5. Get Info about route")
+    print("1. Draw matrix map (land routes)")
+    print("2. Draw real map (land routes)")
+    print("3. Draw matrix map (sea routes)")
+    print("4. Draw matrix map (air routes)")
 
-    print("\n6. Algorithm Depth First Search")
-    print("7. Algorithm Breadth First Search")
-    print("8. Algorithm A*")
-    print("9. Algorithm (dionisio, inventa um nome para aqui)")
-    print("10. Algorithm (à lá Dário)")
+    print("\n5. Get Info about city")
+    print("6. Get capitals cities")
+    print("7. Get Info about route")
+
+    print("\n8. Algorithm Depth First Search")
+    print("9. Algorithm Breadth First Search")
+    print("10. Algorithm A*")
+    print("11. Algorithm (dionisio, inventa um nome para aqui)")
+    print("12. Algorithm (à lá Dário)")
 
     print("\n0. Code Examples")
 
@@ -40,17 +43,29 @@ def interface(map: Map):
 
     if option == "1":
         job_for_another_core = multiprocessing.Process(
-            target=draw_map, args=(map, "matrix")
+            target=draw_map, args=(map, "matrix", "land")
         )
         job_for_another_core.start()
 
     elif option == "2":
         job_for_another_core = multiprocessing.Process(
-            target=draw_map, args=(map, "real")
+            target=draw_map, args=(map, "real", "land")
+        )
+        job_for_another_core.start()
+    
+    if option == "3":
+        job_for_another_core = multiprocessing.Process(
+            target=draw_map, args=(map, "matrix", "sea")
         )
         job_for_another_core.start()
 
-    elif option == "3":
+    elif option == "4":
+        job_for_another_core = multiprocessing.Process(
+            target=draw_map, args=(map, "matrix", "air")
+        )
+        job_for_another_core.start()
+
+    elif option == "5":
         city_id = input("\nCity ID: ")
 
         try:
@@ -68,7 +83,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "4":
+    elif option == "6":
         capitals = map.get_capitals()
 
         print("\nCapitals IDs:")
@@ -76,7 +91,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "5":
+    elif option == "7":
         city_id_1 = input("\nCity ID 1: ")
         city_id_2 = input("City ID 2: ")
 
@@ -91,7 +106,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "6":
+    elif option == "8":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -105,7 +120,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "7":
+    elif option == "9":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -119,7 +134,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "8":
+    elif option == "10":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -134,7 +149,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "9":
+    elif option == "11":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -149,7 +164,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "10":
+    elif option == "12":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -202,7 +217,7 @@ def do_you_want_draw_the_path(map, path):
     answer = input("\nDo you want to draw the path? (y/N) ")
 
     if answer == "y":
-        job = multiprocessing.Process(target=draw_map, args=(map, "real", path))
+        job = multiprocessing.Process(target=draw_map, args=(map, "real", "land", path))
         job.start()
     else:
         pass
