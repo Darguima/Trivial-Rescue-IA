@@ -110,7 +110,6 @@ def find_path(map: Map, end_city_id: str):
         ),
     )
 
-
     open_list = set([start_city["id"]])
     visited = set([start_city["id"]])
     parent = {start_city["id"]: None}

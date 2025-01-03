@@ -40,3 +40,6 @@ class Truck(Vehicle):
         fuel_liters *= 2.5 + (self.elevation_diff / 1000) * 2
 
         return {"time": time, "fuel_liters": fuel_liters}
+    
+    def __str__(self):
+        return f"Truck: {self.starting_node} -> {self.ending_node}"

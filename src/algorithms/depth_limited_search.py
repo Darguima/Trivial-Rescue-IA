@@ -3,13 +3,16 @@ import math
 from map.map import Map
 from utils.distance_between_coords import distance_between_coords
 
+from utils.print_utils import input_centered
+
 from vehicles.sum_vehicles_cost import sum_vehicles_cost
 from vehicles.car import Car
 from vehicles.truck import Truck
 from vehicles.helicopter import Helicopter
 
-def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
-    path = find_path(map, end_city_id)
+def depth_limited_search(map: Map, end_city_id: str, groceries_tons: int):
+    limit = int(input_centered("Limit: "))
+    path = find_path(map, end_city_id, limit)
 
     if path is None:
         print("\nPath not found")
@@ -21,25 +24,27 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
     truck_route = [Truck(map, path[i], path[i + 1]) for i in range(len(path) - 1)]
     helicopter_route = [Helicopter(map, path[0], path[-1])]
 
-    # ⚠️ Verificar disponibilidade dos veículos na capital
-    capital_id = path[0]  # A capital é o primeiro nó no caminho
-    capital_info = map.get_city_by_id(capital_id)["capital_info"]
-
+   
+    start_city_id = path[0]
+    capital_info = map.get_city_by_id(start_city_id)["capital_info"]
     cars_qnt_needed = math.ceil(groceries_tons / Car.MAX_CAPACITY_TONS)
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
 
-    if (
-        capital_info["cars"] < cars_qnt_needed
-        and capital_info["trucks"] < trucks_qnt_needed
-        and capital_info["helicopters"] < helicopters_qnt_needed
-    ):
-        print("\nNot enough vehicles available in the capital.")
-        return None
+    if capital_info["cars"] < cars_qnt_needed:
+        car_cost = None
+    else:
+        car_cost = sum_vehicles_cost(car_route, [cars_qnt_needed] * len(car_route))
 
-    car_cost = sum_vehicles_cost(car_route) if capital_info["cars"] >= cars_qnt_needed else None
-    truck_cost = sum_vehicles_cost(truck_route) if capital_info["trucks"] >= trucks_qnt_needed else None
-    helicopter_cost = sum_vehicles_cost(helicopter_route) if capital_info["helicopters"] >= helicopters_qnt_needed else None
+    if capital_info["trucks"] < trucks_qnt_needed:
+        truck_cost = None
+    else:
+        truck_cost = sum_vehicles_cost(truck_route, [trucks_qnt_needed] * len(truck_route))
+
+    if capital_info["helicopters"] < helicopters_qnt_needed:
+        helicopter_cost = None
+    else:
+        helicopter_cost = sum_vehicles_cost(helicopter_route, [helicopters_qnt_needed] * len(helicopter_route))
 
     print("\nRoute costs for each vehicle: (None is not possible routes)")
     print("\nCar cost of the path:", car_cost)
@@ -52,10 +57,6 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
         (helicopter_cost, helicopters_qnt_needed, helicopter_route),
     ]
     options = [option for option in options if option[0] is not None]
-
-    if not options:
-        print("\nNo valid routes available.")
-        return None
 
     best_index, best_cost = min(
         enumerate(options),
@@ -70,7 +71,7 @@ def depth_first_search(map: Map, end_city_id: str, groceries_tons: int):
 
     return options[best_index][2]
 
-def find_path(map: Map, end_city_id: str):
+def find_path(map: Map, end_city_id: str, limit: int):
     end_city = map.get_city_by_id(end_city_id)
 
     capitals = map.get_capitals()
@@ -82,12 +83,12 @@ def find_path(map: Map, end_city_id: str):
     )
     start_city = nearest_capital
 
-    stack = [start_city]
+    stack = [(start_city, 0)]
     visited = set()
     parent = {start_city["id"]: None}
 
     while stack:
-        current_city = stack.pop()
+        current_city, depth = stack.pop()
         current_city_id = current_city["id"]
 
         if current_city_id in visited:
@@ -105,9 +106,10 @@ def find_path(map: Map, end_city_id: str):
 
             return path
 
-        for neighbor_id in current_city["neighbors"]["land"]:
-            if neighbor_id not in visited:
-                stack.append(map.get_city_by_id(neighbor_id))
-                parent[neighbor_id] = current_city_id
+        if depth < limit:
+            for neighbor_id in current_city["neighbors"]["land"]:
+                if neighbor_id not in visited:
+                    stack.append((map.get_city_by_id(neighbor_id), depth + 1))
+                    parent[neighbor_id] = current_city_id
 
     return None
