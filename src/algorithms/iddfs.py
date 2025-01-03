@@ -6,6 +6,7 @@ from utils.choose_best_routes_from_multiple_capitals import (
     choose_best_routes_from_multiple_capitals,
 )
 
+
 def iddfs(map: Map, end_city_id: str, groceries_tons: int, max_depth: int = 1000):
     end_city_id = str(end_city_id)
     end_city = map.get_city_by_id(end_city_id)
@@ -24,7 +25,7 @@ def iddfs(map: Map, end_city_id: str, groceries_tons: int, max_depth: int = 1000
         groceries_tons,
         lambda m, start_id, end_id, route_type: find_path_with_iddfs(
             m, start_id, end_id, route_type, max_depth
-        )
+        ),
     )
 
     flattened_routes = [
@@ -68,7 +69,7 @@ def dls(
         visited.add(current_city_id)
 
         if current_city_id == end_city_id:
-            
+
             path = []
             while current_city_id is not None:
                 path.append(current_city_id)
