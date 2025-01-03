@@ -5,18 +5,14 @@ from json import dumps as json_dumps
 from map.map import Map
 from map.draw_map import draw_map
 
-from vehicles.car import Car
-from vehicles.sum_vehicles_cost import sum_vehicles_cost
-
 from algorithms.DFS import depth_first_search
 from algorithms.BFS import breadth_first_search
 from algorithms.A_star import A_star
+from algorithms.greedy import greedy
 from algorithms.dario import dario
 from algorithms.Dijkstra import dijkstra
 from algorithms.bidirectional_bfs import bidirectional_bfs
 from algorithms.bidirectional_dfs import bidirectional_dfs
-from algorithms.greedy import greedy
-from algorithms.Dijkstra import dijkstra
 
 
 def interface(map: Map):
@@ -27,37 +23,50 @@ def interface(map: Map):
 
     print("Select an option:\n")
 
-    print("1. Draw matrix map")
-    print("2. Draw real map")
-    print("3. Get Info about city")
-    print("4. Get capitals cities")
-    print("5. Get Info about route")
+    print("1. Draw matrix map (land routes)")
+    print("2. Draw real map (land routes)")
+    print("3. Draw matrix map (sea routes)")
+    print("4. Draw matrix map (air routes)")
 
-    print("\n6. Algorithm Depth First Search")
-    print("7. Algorithm Breadth First Search")
-    print("8. Algorithm A*")
-    print("9. Algorithm Greedy")
-    print("10. Algorithm (à lá Dário)")
-    print("11. Algorithm Dijkstra")
-    print("12. Algorithm Bidirectional")
-
-    print("\n0. Code Examples")
+    print("\n5. Get Info about city")
+    print("6. Get capitals cities")
+    print("7. Get Info about route")
+    
+    print("\n8. Algorithm Depth First Search")
+    print("9. Algorithm Breadth First Search")
+    print("10. Algorithm A*")
+    print("11. Algorithm Greedy")
+    print("12. Algorithm (à lá Dário)")
+    print("13. Algorithm Dijkstra")
+    print("14. Algorithm Bidirectional")
 
     option = input("\nOption: ")
 
     if option == "1":
         job_for_another_core = multiprocessing.Process(
-            target=draw_map, args=(map, "matrix")
+            target=draw_map, args=(map, "matrix", "land")
         )
         job_for_another_core.start()
 
     elif option == "2":
         job_for_another_core = multiprocessing.Process(
-            target=draw_map, args=(map, "real")
+            target=draw_map, args=(map, "real", "land")
+        )
+        job_for_another_core.start()
+    
+    if option == "3":
+        job_for_another_core = multiprocessing.Process(
+            target=draw_map, args=(map, "matrix", "sea")
         )
         job_for_another_core.start()
 
-    elif option == "3":
+    elif option == "4":
+        job_for_another_core = multiprocessing.Process(
+            target=draw_map, args=(map, "matrix", "air")
+        )
+        job_for_another_core.start()
+
+    elif option == "5":
         city_id = input("\nCity ID: ")
 
         try:
@@ -75,7 +84,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "4":
+    elif option == "6":
         capitals = map.get_capitals()
 
         print("\nCapitals IDs:")
@@ -83,7 +92,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "5":
+    elif option == "7":
         city_id_1 = input("\nCity ID 1: ")
         city_id_2 = input("City ID 2: ")
 
@@ -98,7 +107,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "6":
+    elif option == "8":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -112,44 +121,13 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "7":
-        city_id = input("\nDestination City ID: ")
-        groceries_tons = int(input("\nTons of grocery: "))
-
-        path = breadth_first_search(map, city_id, groceries_tons)
-        do_you_want_draw_the_path(map, path)
-        try:
-            ...
-
-        except Exception as e:
-            print(f"\nError: {e}")
-
-        press_to_continue()
-
-    elif option == "8":
-        city_id = input("\nDestination City ID: ")
-        groceries_tons = int(input("\nTons of grocery: "))
-
-        path = A_star(map, city_id, groceries_tons)
-        do_you_want_draw_the_path(map, path)
-        try:
-            # A_star(map, city_id, groceries_tons)
-            ...
-
-        except Exception as e:
-            print(f"\nError: {e}")
-
-        press_to_continue()
-
     elif option == "9":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
-
-        path = greedy(map, city_id, groceries_tons)
-        do_you_want_draw_the_path(map, path)
+ 
         try:
-            # dionisio(map, city_id, groceries_tons)
-            ...
+            path = breadth_first_search(map, city_id, groceries_tons)
+            do_you_want_draw_the_path(map, path)
 
         except Exception as e:
             print(f"\nError: {e}")
@@ -157,6 +135,32 @@ def interface(map: Map):
         press_to_continue()
 
     elif option == "10":
+        city_id = input("\nDestination City ID: ")
+        groceries_tons = int(input("\nTons of grocery: "))
+
+        try:
+            path = A_star(map, city_id, groceries_tons)
+            do_you_want_draw_the_path(map, path)
+
+        except Exception as e:
+            print(f"\nError: {e}")
+
+        press_to_continue()
+
+    elif option == "11":
+        city_id = input("\nDestination City ID: ")
+        groceries_tons = int(input("\nTons of grocery: "))
+
+        try:
+            path = greedy(map, city_id, groceries_tons)
+            do_you_want_draw_the_path(map, path)
+
+        except Exception as e:
+            print(f"\nError: {e}")
+
+        press_to_continue()
+
+    elif option == "12":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -171,7 +175,7 @@ def interface(map: Map):
 
         press_to_continue()
 
-    elif option == "11":
+    elif option == "13":
         city_id = input("\nDestination City ID: ")
         groceries_tons = int(input("\nTons of grocery: "))
 
@@ -183,7 +187,8 @@ def interface(map: Map):
         except Exception as e:
             print(f"\nError: {e}")
         press_to_continue()
-    elif option == "12":
+
+    elif option == "14":
     # Ask for the type of search: BFS or DFS
         search_type = input("\nChoose search type: 1) BFS or 2) DFS: ")
 
@@ -218,19 +223,6 @@ def interface(map: Map):
 
         press_to_continue()
 
-
-    elif option == "0":
-        print(map.get_city_by_id(0))
-        print(map.get_capitals())
-        # print(map.get_all_cities())
-        print(map.get_routes_between_cities(0, 1))
-
-        route = [Car(map, 0, 1)]
-        print(sum_vehicles_cost(route, None))
-
-        press_to_continue()
-
-
 def clear():
     if "TERM" not in environ:
         print("\n" * 100)
@@ -257,7 +249,7 @@ def do_you_want_draw_the_path(map, path):
     answer = input("\nDo you want to draw the path? (y/N) ")
 
     if answer == "y":
-        job = multiprocessing.Process(target=draw_map, args=(map, "real", path))
+        job = multiprocessing.Process(target=draw_map, args=(map, "real", "land", path))
         job.start()
     else:
         pass
