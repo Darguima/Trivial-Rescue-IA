@@ -6,7 +6,7 @@ import math
 from utils.distance_between_coords import distance_between_coords
 from _types.map_types import CitiesDict, RoutesDict
 
-MATRIX_WIDTH = 7  # Will exists MATRIX_WIDTH ** 2 spaces to cities in the map
+MATRIX_WIDTH = 10  # Will exists MATRIX_WIDTH ** 2 spaces to cities in the map
 SPACE_SIZE = (
     50  # Each space will be a 50x50 km² square (each space can contain one city)
 )

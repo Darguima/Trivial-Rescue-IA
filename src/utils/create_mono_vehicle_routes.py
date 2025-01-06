@@ -53,16 +53,18 @@ def create_mono_vehicle_routes(
         ]
         route_cost = sum_vehicles_cost(
             route, [vehicles_used] * len(route), map=map
-        ).get_final_cost()
+        )
+        
         max_tons_transported = vehicles_used * Car.MAX_CAPACITY_TONS
 
-        routes.append(
-            {
-                "vehicles_used": vehicles_used,
-                "route": route,
-                "cost": route_cost,
-                "max_tons_transported": max_tons_transported,
-            }
+        if route_cost:
+            routes.append(
+                {
+                    "vehicles_used": vehicles_used,
+                    "route": route,
+                    "cost": route_cost.get_final_cost(),
+                    "max_tons_transported": max_tons_transported,
+                }
         )
 
     trucks_qnt_needed = math.ceil(groceries_tons / Truck.MAX_CAPACITY_TONS)
@@ -77,16 +79,17 @@ def create_mono_vehicle_routes(
         ]
         route_cost = sum_vehicles_cost(
             route, [vehicles_used] * len(route), map=map
-        ).get_final_cost()
-
-        routes.append(
-            {
-                "vehicles_used": vehicles_used,
-                "route": route,
-                "cost": route_cost,
-                "max_tons_transported": max_tons_transported,
-            }
         )
+
+        if route_cost:
+            routes.append(
+                {
+                    "vehicles_used": vehicles_used,
+                    "route": route,
+                    "cost": route_cost.get_final_cost(),
+                    "max_tons_transported": max_tons_transported,
+                }
+            )
 
     helicopters_qnt_needed = math.ceil(groceries_tons / Helicopter.MAX_CAPACITY_TONS)
     helicopters_available = map.get_city_by_id(capital_city_id)["capital_info"][
@@ -97,16 +100,17 @@ def create_mono_vehicle_routes(
 
     if air_path and vehicles_used > 0:
         route = [Helicopter(map, air_path[0], air_path[-1])]
-        route_cost = sum_vehicles_cost(route, [vehicles_used], map=map).get_final_cost()
-
-        routes.append(
-            {
-                "vehicles_used": vehicles_used,
-                "route": route,
-                "cost": route_cost,
-                "max_tons_transported": max_tons_transported,
-            }
-        )
+        route_cost = sum_vehicles_cost(route, [vehicles_used], map=map)
+        
+        if route_cost:
+            routes.append(
+                {
+                    "vehicles_used": vehicles_used,
+                    "route": route,
+                    "cost": route_cost.get_final_cost(),
+                    "max_tons_transported": max_tons_transported,
+                }
+            )
 
     boats_qnt_needed = math.ceil(groceries_tons / Boat.MAX_CAPACITY_TONS)
     boats_available = (
@@ -123,15 +127,16 @@ def create_mono_vehicle_routes(
         ]
         route_cost = sum_vehicles_cost(
             route, [vehicles_used] * len(route), map=map
-        ).get_final_cost()
+        )
 
-        routes.append(
-            {
-                "vehicles_used": vehicles_used,
-                "route": route,
-                "cost": route_cost,
-                "max_tons_transported": max_tons_transported,
-            }
+        if route_cost:
+            routes.append(
+                {
+                    "vehicles_used": vehicles_used,
+                    "route": route,
+                    "cost": route_cost.get_final_cost(),
+                    "max_tons_transported": max_tons_transported,
+                }
         )
 
     routes = sorted(routes, key=lambda route: route["cost"])
