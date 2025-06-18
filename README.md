@@ -3,7 +3,7 @@
   <h3 align="center">Trivial Rescue IA</h3>
 
   <p align="center">
-    project_description
+    Search algorithms for optimizing disaster relief food distribution routes.
     <br />
     <br />
     <a href="#-demo">View Demo</a>
