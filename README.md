@@ -52,6 +52,8 @@
 
 The goal of the project was to develop search algorithms that optimize food distribution during natural disasters. The system efficiently allocates limited resources to affected areas while considering vehicle constraints, fuel limitations, and changing weather conditions. It prioritizes critical zones based on population density and severity, managing different vehicle types (drones, helicopters, trucks, boats) with varying capabilities to maximize coverage of disaster-affected areas within tight time windows using both informed and uninformed search strategies.
 
+Check the [project statement](./statement.pdf) to more info about the requirements.
+
 ### ⚙️ How it works?
 
 Our solution consists of two main components: a map generation script that creates realistic disaster scenarios with terrestrial, aerial, and maritime routes, and a route optimization script that visualizes the map and implements various search algorithms. Given the tonnage of supplies to distribute, the system automatically finds the optimal delivery routes by analyzing different pathways and vehicle capabilities to ensure efficient resource allocation across affected areas.
